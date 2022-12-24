@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require "model/database.php";
 require "model/categories_db.php";
 require "model/products_db.php";
@@ -13,12 +15,14 @@ else {
     $action = "home";
 }
 
-$name = "Florian";
+$name = null;
+if(isset($_SESSION["user"])) $name = $_SESSION["user"]["username"];
 
 switch($action){
     case "home":
         $title = "Accueil - Web 4 Shop";
         $categories = select_categories();
+        $_SESSION["backToPage"] = "?action=home";
         include "view/home.php";
         break;
 
@@ -30,41 +34,46 @@ switch($action){
         $categories = select_categories();
         if(isset($category)){
             $products = select_products_by_category($category);
+            $_SESSION["backToPage"] = "?action=select_products&category=".$category;
             include "view/products.php";
         }
         else{
             $products = select_products();
+            $_SESSION["backToPage"] = "?action=select_products";
             include "view/products.php";
         }
         break;
 
     case "shoppingcart":
         $title = "Panier - Web 4 Shop";
+        $_SESSION["backToPage"] = "?action=shoppingcart";
         include "view/shoppingcart.php";
         break;
 
     case "account":
         $title = "Mon compte - Web 4 Shop";
+        $_SESSION["backToPage"] = "?action=account";
         include "view/account.php";
         break;
 
-    case "login":
+    case "loginpage":
         $title = "Connexion - Web 4 Shop";
-        include "view/login.php";
+        include "view/loginpage.php";
         break;
 
-    case "register":
+    case "registerpage":
         $title = "Inscription - Web 4 Shop";
-        include "view/register.php";
+        include "view/registerpage.php";
         break;
 
     case "logout":
-        header("Location: .?action=home");
+        header("Location: logout.php");
         break;
 
     default:
         $title = "Accueil - Web 4 Shop";
         $categories = select_categories();
+        $_SESSION["backToPage"] = "?action=home";
         include "view/home.php";
         break;
     
