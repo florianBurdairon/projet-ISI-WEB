@@ -27,12 +27,21 @@
                 <!--<li class="nav-item"><a class="nav-link" href="account.php">Mon compte</a></li>-->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Bonjour <?= $name?>
+                    <?php 
+                        if($name == null) echo "Connexion/Inscription";
+                        else echo "Bonjour ".$name;
+                    ?>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="?action=account">Accéder à mon compte</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="?action=logout">Se déconnecter</a>
+                        <?php if(isset($_SESSION["user"])):?>
+                            <a class="dropdown-item" href="?action=account">Accéder à mon compte</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="?action=logout">Se déconnecter</a>
+                        <?php else : ?>
+                            <a class="dropdown-item" href="?action=loginpage">Se connecter</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="?action=registerpage">S'inscrire</a>
+                        <?php endif; ?>
                     </div>
                 </li>
             </ul>
