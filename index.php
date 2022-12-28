@@ -18,6 +18,18 @@ else {
 $name = null;
 if(isset($_SESSION["user"])) $name = $_SESSION["user"]["username"];
 
+if($action != "registerpage"){
+    unset($_SESSION["error"]["register"]);
+    if (isset($_SESSION["autofill"]["register"]["email"])) $newEmail = $_SESSION["autofill"]["register"]["email"];
+    unset($_SESSION["autofill"]["register"]);
+    if (isset($newEmail)) $_SESSION["autofill"]["register"]["email"] = $newEmail;
+} 
+
+if($action != "loginpage"){
+    unset($_SESSION["error"]["login"]);
+    if ($action != "registerpage") unset($_SESSION["autofill"]["login"]);
+} 
+
 switch($action){
     case "home":
         $title = "Accueil - Web 4 Shop";

@@ -2,14 +2,14 @@
     require "components/head.php";
     require "components/header.php";
     $errors = array();
-    if(isset($_SESSION["error"])){
-        if(is_array($_SESSION["error"])){
-            foreach($_SESSION["error"] as $error){
+    if(isset($_SESSION["error"]["login"])){
+        if(is_array($_SESSION["error"]["login"])){
+            foreach($_SESSION["error"]["login"] as $error){
                 $errors[$error] = true;
             }
         }
         else{
-            $errors[$_SESSION["error"]] = true;
+            $errors[$_SESSION["error"]["login"]] = true;
         }
     }
 ?>
@@ -20,9 +20,9 @@
             <form method="post" action="login.php">
                 <input type="hidden" name="action" value="login_check">
                 <label for="email">Email</label>
-                <input type="email" name="email">
-                <?php if(isset($errors["missing_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir l'adresse email.</div>";?>
-                <?php if(isset($errors["wrong_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Adresse email incorrecte.</div>";?>
+                <input type="email" name="email" value="<?php if(isset($_SESSION["autofill"]["login"])) echo $_SESSION["autofill"]["login"]; ?>">
+                <?php if(isset($errors["missing_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir une adresse email.</div>";?>
+                <?php if(isset($errors["wrong_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Adresse email inconnue. <a href=\"?action=registerpage\">S'inscrire</a></div>";?>
                 <br>
                 <label for="password">Mot de passe</label>
                 <input type="password" name="password">
