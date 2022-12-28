@@ -12,8 +12,6 @@
             $errors[$_SESSION["error"]["register"]] = true;
         }
     }
-    var_dump($_SESSION["error"]);
-    var_dump($_SESSION["autofill"]);
 ?>
 <div class="d-sm-inline-flex d-flex" id="wrapper">
     <div><!-- class="col-lg-8 col-md-7 col-sm-6 col-xs-5" id="page-content-wrapper">-->
