@@ -1,4 +1,9 @@
 <?php
+    if(!isset($isIndex)){
+        header("Location: ../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+    
     function select_customer_by_email($email){
         global $db;
         $query = "SELECT * FROM customers WHERE email = '".$email."'";

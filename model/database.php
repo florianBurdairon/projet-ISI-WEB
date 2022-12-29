@@ -1,4 +1,9 @@
 <?php
+    if(!isset($isIndex)){
+        header("Location: ../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+    
     $dsn = 'mysql:host=localhost;dbname=web4shop';
     $username = 'root';
     //$password = '';

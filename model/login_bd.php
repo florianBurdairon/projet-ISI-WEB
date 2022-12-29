@@ -1,4 +1,9 @@
 <?php
+    if(!isset($isIndex)){
+        header("Location: ../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+    
     function select_login_by_email($email){
         global $db;
         $query = "SELECT logins.password FROM customers JOIN logins ON logins.customer_id = customers.id WHERE customers.email = '".$email."'";

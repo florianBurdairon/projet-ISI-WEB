@@ -1,4 +1,9 @@
 <?php
+    if(!isset($isIndex)){
+        header("Location: ../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+    
     function select_categories() {
         global $db;
         $query = "SELECT categories.name FROM categories";
