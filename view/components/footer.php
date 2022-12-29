@@ -1,3 +1,9 @@
+<?php
+    if(!isset($enableComponents)){
+        header("Location: ../../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+?>
 <footer class="fixed-bottom text-light bg-secondary d-flex justify-content-center">
     <p>Ce site a été développé par BERNARD Alban et BURDAIRON Florian</p>
     <p></p>

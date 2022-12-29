@@ -1,3 +1,9 @@
+<?php
+    if(!isset($enableComponents)){
+        header("Location: ../../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+?>
 <body>
 <header>
     <!-- Navigation sur le site -->

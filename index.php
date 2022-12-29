@@ -1,5 +1,6 @@
 <?php
 session_start();
+$isIndex = true;
 
 require "model/database.php";
 require "model/categories_db.php";
@@ -63,6 +64,7 @@ switch($action){
         break;
 
     case "account":
+        if(!isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         $title = "Mon compte - Web 4 Shop";
         $_SESSION["backToPage"] = "?action=account";
         include "view/account.php";
@@ -81,6 +83,7 @@ switch($action){
         break;
 
     case "logout":
+        if(!isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         header("Location: logout.php");
         break;
 

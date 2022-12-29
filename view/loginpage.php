@@ -1,4 +1,10 @@
 <?php
+    if(!isset($isIndex)){
+        header("Location: ../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+    $enableComponents = true;
+    
     require "components/head.php";
     require "components/header.php";
     $errors = array();
