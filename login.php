@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(isset($_POST["action"]) && $_POST["action"] == "login_check"){
+if(isset($_POST["action"]) && $_POST["action"] == "login_check" && !isset($_SESSION["user"])){
 
     require "model/database.php";
     require "model/login_bd.php";
