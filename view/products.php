@@ -1,5 +1,6 @@
 <?php 
-    if(!isset($isIndex)){
+    if(!isset($isIndex) || !isset($_SESSION["backToPage"])){
+        session_start();
         header("Location: ../index.php".$_SESSION["backToPage"]);
         exit();
     }

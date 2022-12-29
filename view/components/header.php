@@ -1,5 +1,6 @@
 <?php
-    if(!isset($enableComponents)){
+    if(!isset($enableComponents) || !isset($_SESSION["backToPage"])){
+        session_start();
         header("Location: ../../index.php".$_SESSION["backToPage"]);
         exit();
     }
