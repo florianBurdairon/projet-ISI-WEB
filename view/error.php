@@ -6,6 +6,9 @@
     }
     $enableComponents = true;
     
+    $title="Error";
+    $action="error";
+
     include "components/head.php";
     include "components/header.php";
 ?>
@@ -13,5 +16,5 @@
 <br>
 <p><?=$error_message?></p>
 <br>
-<p><a href=".">Back</a></p>
+<p><a href="<?=$_SESSION["backToPage"]?>">Back</a></p>
 <?php include "components/footer.php";

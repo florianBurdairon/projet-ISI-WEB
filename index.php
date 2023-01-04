@@ -2,10 +2,6 @@
 session_start();
 $isIndex = true;
 
-require "model/database.php";
-require "model/categories_db.php";
-require "model/products_db.php";
-
 if(isset($_POST["action"])){
     $action = htmlspecialchars($_POST["action"]);
 } 
@@ -18,6 +14,12 @@ else {
 
 $name = null;
 if(isset($_SESSION["user"])) $name = $_SESSION["user"]["username"];
+
+if(!isset($_SESSION["backToPage"])) $_SESSION["backToPage"] = "";
+
+require "model/database.php";
+require "model/categories_db.php";
+require "model/products_db.php";
 
 if($action != "registerpage"){
     unset($_SESSION["error"]["register"]);
