@@ -8,11 +8,31 @@
         <div class="container-fluid">
             <h1 class="mt-4">Produits<?php if(isset($category)) echo(" - ".$category);?></h1>
             <?php
-            // Itération sur les résultats de la requête SQL
+            // Itération sur les résultats de la requête SQL -> Produits
             if(isset($products)){
                 foreach ($products as $product) {
+                    $img = $product['image'];
                     $name = $product['name'];
-                    echo "<p>$name</p>";
+                    $desc = $product['description'];
+                    $price =$product['price'];
+
+                    ?>
+
+                    <!-- HTML -->
+
+                    <div class="d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-5">
+                        <div class="border-end bg-white col-5 col-lg-3 col-md-4 col-sm-5 m-2">
+                            <img class="rounded-circle w-100" src="view/productimages/<?php echo $img ?>" alt="<?php echo $img ?>">
+                        </div>
+                        <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
+                            <h3><?php echo $name ?></h3>
+                            <p class="align-items-center"><?php echo $desc ?></p>
+                            <p>Prix : <?php echo $price ?>€</p>
+                            <p>Acheter (Not yet)</p>
+                        </div>
+                    </div>
+
+                    <?php
                 }
             }
             
