@@ -1,6 +1,9 @@
 <?php
 session_start();
-$isIndex = true;
+
+require "model/database.php";
+require "model/categories_db.php";
+require "model/products_db.php";
 
 if(isset($_POST["action"])){
     $action = htmlspecialchars($_POST["action"]);
@@ -14,12 +17,6 @@ else {
 
 $name = null;
 if(isset($_SESSION["user"])) $name = $_SESSION["user"]["username"];
-
-if(!isset($_SESSION["backToPage"])) $_SESSION["backToPage"] = "";
-
-require "model/database.php";
-require "model/categories_db.php";
-require "model/products_db.php";
 
 if($action != "registerpage"){
     unset($_SESSION["error"]["register"]);
@@ -66,31 +63,30 @@ switch($action){
         break;
 
     case "account":
-        if(!isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         $title = "Mon compte - Web 4 Shop";
         $_SESSION["backToPage"] = "?action=account";
         include "view/account.php";
         break;
 
     case "loginpage":
-        if(isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         $title = "Connexion - Web 4 Shop";
         include "view/loginpage.php";
         break;
 
     case "registerpage":
-        if(isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         $title = "Inscription - Web 4 Shop";
         include "view/registerpage.php";
         break;
 
     case "logout":
-        if(!isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         header("Location: logout.php");
         break;
 
     default:
-        header("Location: index.php".$_SESSION["backToPage"]);
+        $title = "Accueil - Web 4 Shop";
+        $categories = select_categories();
+        $_SESSION["backToPage"] = "?action=home";
+        include "view/home.php";
         break;
     
 }
