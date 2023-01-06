@@ -11,6 +11,7 @@
             // Itération sur les résultats de la requête SQL -> Produits
             if(isset($products)){
                 foreach ($products as $product) {
+                    $id = $product['id'];
                     $img = $product['image'];
                     $name = $product['name'];
                     $desc = $product['description'];
@@ -26,9 +27,17 @@
                         </div>
                         <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
                             <h3><?php echo $name ?></h3>
-                            <p class="align-items-center"><?php echo $desc ?></p>
+                            <p class="text-md-left text-sm-center"><?php echo $desc ?></p>
                             <p>Prix : <?php echo $price ?>€</p>
-                            <p>Acheter (Not yet)</p>
+
+                            <form class="d-flex flex-column align-items-center" method="post" action="addToShoppingCart.php">
+                                <input type="hidden" name="product" value="<?php echo $id ?>">
+                                <div>
+                                    <label for="quantity">Quantity :</label>
+                                    <input type="number" id="quantity" name="quantity" value="1" min="1">
+                                </div>
+                                <button type="submit">Ajouter au panier</button>
+                            </form>
                         </div>
                     </div>
 
