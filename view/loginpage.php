@@ -24,8 +24,8 @@
     <div><!-- class="col-lg-8 col-md-7 col-sm-6 col-xs-5" id="page-content-wrapper">-->
         <div class="container-fluid">
             <h1 class="mt-4">Connexion</h1>
-            <form method="post" action="login.php">
-                <input type="hidden" name="action" value="login_check">
+            <form method="post" action="">
+                <input type="hidden" name="action" value="login">
                 <label for="email">Email</label>
                 <input type="email" name="email" value="<?php if(isset($_SESSION["autofill"]["login"])) echo $_SESSION["autofill"]["login"]; ?>">
                 <?php if(isset($errors["missing_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir une adresse email.</div>";?>
