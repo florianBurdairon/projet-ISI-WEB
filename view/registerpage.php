@@ -18,8 +18,8 @@
         <div class="container-fluid">
             <h1 class="mt-4">Inscription</h1>
             <?php if(isset($errors["error_insert_login"]) || isset($errors["error_insert_customer"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Une erreur s'est produites.</div>";?>
-            <form method="post" action="register.php">
-                <input type="hidden" name="action" value="register_check">
+            <form method="post" action="">
+                <input type="hidden" name="action" value="register">
                 <label for="firstname">Prénom</label>
                 <input type="text" name="firstname" value="<?php if(isset($_SESSION["autofill"]["register"]["firstname"])) echo $_SESSION["autofill"]["register"]["firstname"]; ?>">
                 <?php if(isset($errors["missing_firstname"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre prénom.</div>";?>
