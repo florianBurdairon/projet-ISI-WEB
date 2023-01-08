@@ -78,13 +78,11 @@ switch($action){
         break;
 
     case "loginpage":
-        if(isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         $title = "Connexion - Web 4 Shop";
         include "view/loginpage.php";
         break;
 
     case "registerpage":
-        if(isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         $title = "Inscription - Web 4 Shop";
         include "view/registerpage.php";
         break;
@@ -245,7 +243,10 @@ switch($action){
         break;
 
     default:
-        header("Location: index.php".$_SESSION["backToPage"]);
+        $title = "Accueil - Web 4 Shop";
+        $categories = select_categories();
+        $_SESSION["backToPage"] = "?action=home";
+        include "view/home.php";
         break;
     
 }

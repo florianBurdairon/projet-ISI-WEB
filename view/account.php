@@ -1,11 +1,4 @@
 <?php
-    if(!isset($isIndex) || !isset($_SESSION["backToPage"])){
-        session_start();
-        header("Location: ../index.php".$_SESSION["backToPage"]);
-        exit();
-    }
-    $enableComponents = true;
-    
     require "components/head.php";
     require "components/header.php";
 ?>
