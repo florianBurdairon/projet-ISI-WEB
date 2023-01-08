@@ -56,10 +56,13 @@ switch($action){
         }
         break;
 
-    case "shoppingcart":
+    case "shoppingcartpage":
         $title = "Panier - Web 4 Shop";
-        $_SESSION["backToPage"] = "?action=shoppingcart";
-        include "view/shoppingcart.php";
+        $_SESSION["backToPage"] = "?action=shoppingcartpage";
+        if (isset($_SESSION["shoppingcart"]))
+            $products = $_SESSION["shoppingcart"]["products"];
+
+        include "view/shoppingcartpage.php";
         break;
 
     case "account":

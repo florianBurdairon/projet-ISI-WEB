@@ -23,7 +23,7 @@
 
             <!-- Navigation sur les informations de session -->
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link <?php if($action == "shoppingcart") echo "active" ?>" href="?action=shoppingcart">Panier</a></li>
+                <li class="nav-item"><a class="nav-link <?php if($action == "shoppingcartpage") echo "active" ?>" href="?action=shoppingcartpage">Panier</a></li>
                 <!--<li class="nav-item"><a class="nav-link" href="account.php">Mon compte</a></li>-->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

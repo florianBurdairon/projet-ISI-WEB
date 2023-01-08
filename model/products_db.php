@@ -18,4 +18,14 @@
         $results = $sth->fetchAll();
         return $results;
     }
+
+    function get_product($product_id)
+    {
+        global $db;
+        $query = "SELECT * FROM products WHERE id = '".$product_id."'";
+        $sth = $db->prepare($query);
+        $sth->execute();
+        $product = $sth->fetchAll();
+        return $product;
+    }
 ?>
