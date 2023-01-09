@@ -19,7 +19,7 @@
         return $results;
     }
 
-    function get_product($product_id)
+    function select_product($product_id)
     {
         global $db;
         $query = "SELECT * FROM products WHERE id = '".$product_id."'";

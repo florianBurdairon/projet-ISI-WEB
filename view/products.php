@@ -29,7 +29,17 @@
                             <h3><?php echo $name ?></h3>
                             <p class="text-md-left text-sm-center"><?php echo $desc ?></p>
                             <p>Prix : <?php echo $price ?>€</p>
-
+                            <p class="font-italic">
+                                <?php
+                                if (isset($_SESSION["shoppingcart"]))
+                                {
+                                    if (isset($_SESSION["shoppingcart"]["products"][$id]))
+                                    {
+                                        echo "Ce produit est déjà présent ".$_SESSION["shoppingcart"]["products"][$id]["quantity"]." fois dans votre panier.";
+                                    }
+                                }
+                                ?>
+                            </p>
                             <form class="d-flex flex-column align-items-center" method="post" action="shoppingcart.php">
                                 <input type="hidden" name="operation" value="add">
                                 <input type="hidden" name="product_id" value="<?php echo $id ?>">
@@ -39,6 +49,9 @@
                                 </div>
                                 <button type="submit">Ajouter au panier</button>
                             </form>
+
+                            
+
                         </div>
                     </div>
                     <?php

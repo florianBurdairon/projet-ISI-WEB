@@ -5,14 +5,9 @@ $isIndex = true;
 require "model/database.php";
 require "model/products_db.php";
 require "model/orders_db.php";
-$productsCount = 0;
 
-// If there is already a shopping cart 
-if(isset($_SESSION["shoppingcart"]))
-{
-    $productsCount = sizeof($_SESSION["shoppingcart"]["products"]);
-}
-else // No shopping cart existing
+// No shopping cart existing
+if(!isset($_SESSION["shoppingcart"])) 
 {
     $_SESSION["shoppingcart"] = array();
 
@@ -20,12 +15,8 @@ else // No shopping cart existing
     if (isset($_SESSION["user"])) 
     {
         insert_order($_SESSION["user"]["id"]);
-        $order = select_current_order($_SESSION["user"]["id"])[0];
+        $order = select_current_order($_SESSION["user"]["id"]);
         $_SESSION["shoppingcart"]["id"] = $order["id"];
-    }
-    else
-    {
-        $_SESSION["shoppingcart"]["id"] = "-1";
     }
 }
 
@@ -36,22 +27,52 @@ if (isset($_POST["operation"]) && isset($_POST["product_id"]))
         // If we have a new product to add
         if(isset($_POST["product_id"]))
         {
-            // Add it to the session
-            $_SESSION["shoppingcart"]["products"][$productsCount] = array();
-            $_SESSION["shoppingcart"]["products"][$productsCount] = get_product($_POST["product_id"]);
-            $_SESSION["shoppingcart"]["products"][$productsCount]["quantity"] = $_POST["quantity"];
-            $_SESSION["shoppingcart"]["products"][$productsCount][6] = $_POST["quantity"]; #SQL duplication
+            $product = select_product($_POST["product_id"]);
 
-            // If we have a connected user, we add it to the database
-            if (isset($_SESSION["user"])) 
+            // Is the product already in the shopping cart?
+            $isAlreadyIn = false;
+            foreach($_SESSION["shoppingcart"]["products"] as $o)
             {
-                insert_product_in_order(
-                    $_SESSION["shoppingcart"]["id"], 
-                    $_POST["product_id"], 
-                    $_POST["quantity"]);
+                if ($o["id"] == $_POST["product_id"])
+                    $isAlreadyIn = true;
+            }
+
+            // It's not : we add it
+            if (!$isAlreadyIn)
+            {
+                $_SESSION["shoppingcart"]["products"][$_POST["product_id"]] = array();
+                $_SESSION["shoppingcart"]["products"][$_POST["product_id"]] = select_product($_POST["product_id"]);
+                $_SESSION["shoppingcart"]["products"][$_POST["product_id"]]["quantity"] = $_POST["quantity"];
+                $_SESSION["shoppingcart"]["products"][$_POST["product_id"]][6] = $_POST["quantity"]; #SQL duplication
+
+                // If we have a connected user, we add it to the database
+                if (isset($_SESSION["user"])) 
+                {
+                    insert_product_in_order(
+                        $_SESSION["shoppingcart"]["id"], 
+                        $_POST["product_id"], 
+                        $_POST["quantity"]);
+                }
+            }
+            // It is : we update it
+            else
+            {
+                $newQuantity = $_SESSION["shoppingcart"]["products"][$_POST["product_id"]]["quantity"] + $_POST["quantity"];
+                $_SESSION["shoppingcart"]["products"][$_POST["product_id"]]["quantity"] = $newQuantity;
+                $_SESSION["shoppingcart"]["products"][$_POST["product_id"]][6] = $newQuantity; #SQL duplication
+
+                // If we have a connected user, we update it in the database
+                if (isset($_SESSION["user"])) 
+                {
+                    update_product_in_order(
+                        $_SESSION["shoppingcart"]["id"], 
+                        $_POST["product_id"], 
+                        $newQuantity);
+                }
             }
         }
     }
+
     else if ($_POST["operation"] == "delete")
     {
         // If we have a new product to remove
@@ -65,16 +86,47 @@ if (isset($_POST["operation"]) && isset($_POST["product_id"]))
                     $_POST["product_id"]);
             }
 
-            // delete it from the session
-            $index = -1;
-            for ($i = 0; $i < sizeof($_SESSION["shoppingcart"]["products"]); $i++)
+            unset($_SESSION["shoppingcart"]["products"][$_POST["product_id"]]);
+        }
+    }
+}
+
+// We don't want to do operation on a single product
+else if (isset($_POST["operation"]) && isset($_SESSION["user"]))
+{
+    // Insert the current "session ONLY" shopping cart in the database
+    if ($_POST["operation"] == "insertshoppingcart")
+    {
+        // The shopping cart isn't already in the database
+        if (!isset($_SESSION["shoppingcart"]["id"]))
+        {
+            // New shopping cart in the database
+            insert_order($_SESSION["user"]["id"]);
+            $order = select_current_order($_SESSION["user"]["id"]);
+            $_SESSION["shoppingcart"]["id"] = $order["id"];
+
+            foreach($_SESSION["shoppingcart"]["products"] as $product)
             {
-                if ($_SESSION["shoppingcart"]["products"][$i]["id"] == $_POST["product_id"])
-                {
-                    $index = $i;
-                }
+                insert_product_in_order($order["id"], $product["id"], $product["quantity"]);
             }
-            unset($_SESSION["shoppingcart"]["products"][$index]);
+        }
+    }
+
+    // Load the current "database ONLY" shopping cart in the session 
+    else if ($_POST["operation"] == "loadshoppingcart")
+    {
+        // We overwrite the current shopping cart
+        unset($_SESSION["shoppingcart"]);
+        $_SESSION["shoppingcart"] = array();
+
+        // Select current shopping cart
+        $order = select_current_order($_SESSION["user"]["id"]);
+        $_SESSION["shoppingcart"]["id"] = $order["id"];
+
+        $products = select_products_in_order($order["id"]);
+        foreach($products as $product)
+        {
+            $_SESSION["shoppingcart"]["products"][$product["id"]] = $product;
         }
     }
 }
