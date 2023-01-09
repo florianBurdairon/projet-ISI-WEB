@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <h1 class="mt-4">Produits<?php if(isset($category)) echo(" - ".$category);?></h1>
             <?php
-            echo var_dump($_SESSION);
+            //echo var_dump($_SESSION["shoppingcart"]["products"]);
             // Itération sur les résultats de la requête SQL -> Produits
             if(isset($products)){
                 foreach ($products as $product) {
@@ -31,6 +31,7 @@
                             <p>Prix : <?php echo $price ?>€</p>
 
                             <form class="d-flex flex-column align-items-center" method="post" action="shoppingcart.php">
+                                <input type="hidden" name="operation" value="add">
                                 <input type="hidden" name="product_id" value="<?php echo $id ?>">
                                 <div>
                                     <label for="quantity">Quantity :</label>
@@ -40,11 +41,9 @@
                             </form>
                         </div>
                     </div>
-
                     <?php
                 }
             }
-            
             ?>
         </div>
     </div>

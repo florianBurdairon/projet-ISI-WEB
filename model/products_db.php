@@ -26,6 +26,7 @@
         $sth = $db->prepare($query);
         $sth->execute();
         $product = $sth->fetchAll();
+        $product = $product[0];
         return $product;
     }
 ?>
