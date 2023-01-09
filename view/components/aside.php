@@ -1,3 +1,10 @@
+<?php
+    if(!isset($enableComponents) || !isset($_SESSION["backToPage"])){
+        session_start();
+        header("Location: ../../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+?>
 <div class="border-end bg-white col-lg-2 col-md-3 col-sm-3" id="sidebar-wrapper">
     <h2>Nos offres</h2>
     <nav>

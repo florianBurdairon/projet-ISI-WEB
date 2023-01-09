@@ -20,7 +20,7 @@ if(!isset($_SESSION["backToPage"])) $_SESSION["backToPage"] = "";
 require "model/database.php";
 require "model/categories_db.php";
 require "model/products_db.php";
-require "model/login_bd.php";
+require "model/login_db.php";
 require "model/customers_db.php";
 
 if($action != "registerpage"){
@@ -78,11 +78,13 @@ switch($action){
         break;
 
     case "loginpage":
+        if(isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         $title = "Connexion - Web 4 Shop";
         include "view/loginpage.php";
         break;
 
     case "registerpage":
+        if(isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
         $title = "Inscription - Web 4 Shop";
         include "view/registerpage.php";
         break;
@@ -132,6 +134,8 @@ switch($action){
         break;
 
     case "register":
+        if(isset($_SESSION["user"])) header("Location: index.php".$_SESSION["backToPage"]);
+
         $error_count = 0;
         $_SESSION["error"]["register"] = array();
         $newCustomer = array();
@@ -243,10 +247,7 @@ switch($action){
         break;
 
     default:
-        $title = "Accueil - Web 4 Shop";
-        $categories = select_categories();
-        $_SESSION["backToPage"] = "?action=home";
-        include "view/home.php";
+        header("Location: index.php".$_SESSION["backToPage"]);
         break;
     
 }

@@ -1,6 +1,13 @@
 <?php 
-include "components/head.php";
-include "components/header.php";
+    if(!isset($isIndex) || !isset($_SESSION["backToPage"])){
+        session_start();
+        header("Location: ../index.php".$_SESSION["backToPage"]);
+        exit();
+    }
+    $enableComponents = true;
+
+    include "components/head.php";
+    include "components/header.php";
 ?>
 <div class="d-sm-inline-flex d-flex" id="wrapper">
     <?php include "components/aside.php";?>
