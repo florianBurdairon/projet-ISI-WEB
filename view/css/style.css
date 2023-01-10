@@ -2,3 +2,7 @@ footer{
     min-height:75px;
     padding-top:25px;
 }
+
+table, th, td{
+    border: 1px solid black;
+}
