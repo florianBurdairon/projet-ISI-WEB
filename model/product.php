@@ -13,21 +13,61 @@ class Product extends Model{
 
     private $cat;
 
+    /**
+     * Create a new Product
+     * Obligatory : id, cat/cat_id, name, description, image, price, quantity
+     */
     public function __construct($data) {
-        $this->id = $data["id"];
-        $this->cat_id = $data["cat_id"];
-        $this->name = $data["name"];
-        $this->description = $data["description"];
-        $this->image = $data["image"];
-        $this->price = $data["price"];
-        $this->quantity = $data["quantity"];
+        if (isset($data["id"]))
+            $this->id = $data["id"];
+        else
+            throw new Exception("No ID set");
         
-        $this->cat = Category::select_category_by_id($this->cat_id);
+        if (isset($data["name"]))
+            $this->name = $data["name"];
+        else
+            throw new Exception("No name set");
+        
+        if (isset($data["cat_id"]))
+        {
+            $this->cat_id = $data["cat_id"];
+            $this->cat = Category::select_category_by_id($this->cat_id);
+        }
+        else if (isset($data["cat"]))
+        {
+            $this->cat = $data["cat"];
+            $this->cat_id = $this->cat->get_id();
+        }
+        else
+            throw new Exception("No category set for product ".$this->name.".");
+
+        if (isset($data["description"]))
+            $this->description = $data["description"];
+        else
+            throw new Exception("No decription set for product ".$this->name.".");
+
+        if (isset($data["image"]))
+            $this->image = $data["image"];
+        else
+            throw new Exception("No image set for product ".$this->name.".");
+
+        if (isset($data["price"]))
+            $this->image = $data["price"];
+        else
+            throw new Exception("No price set for product ".$this->name.".");
+        
+        if (isset($data["quantity"]))
+            $this->image = $data["quantity"];
+        else
+            throw new Exception("No quantity set for product ".$this->name.".");
     }
 
     public function get_id()
     {
-        return $this->id;
+        if (isset($this->id))
+            return $this->id;
+        else
+            throw new Exception("No ID for product ".$this->name.". You need to insert it in the database first");
     }
 
     public function get_cat_id()
@@ -81,7 +121,7 @@ class Product extends Model{
     */
     public static function select_products_by_category($cat)
     {
-        $query = "SELECT DISTINCT c.id AS cat_id, p.name, p.description, p.image, p.price, p.quantity, p.id FROM products p, categories c WHERE p.cat_id=c.id AND c.name='".$cat->get_name()."'";
+        $query = "SELECT * FROM products WHERE cat_id='".$cat->get_id()."'";
         $arr = self::fetchAll($query);
 
         $ret = array();

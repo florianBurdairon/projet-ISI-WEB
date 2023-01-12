@@ -27,5 +27,4 @@ abstract class Model {
         $sth->execute();
         return $sth->fetchAll();
     }
-
 }

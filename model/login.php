@@ -7,37 +7,44 @@ class Login extends Model{
     private $id;
     private $customer_id;
     private $username;
-    private $password;
 
     private $customer;
-    private $hashed_password;
+    private $password;
 
+    /**
+     * Create a new Login
+     * Obligatory : customer/customer_id, username, password/raw_password
+     */
     public function __construct($data) {
-        $this->id = $data["id"];
+        if (isset($data["id"]))
+            $this->id = $data["id"];
 
-        if (isset($data["customer_id"]))
-        {
-            $this->customer_id = $data["customer_id"];
-            $this->customer = Customer::select_customer_by_id($data["customer_id"]);
-        }
-        else if (isset($data["customer"]))
+        if (isset($data["customer"]))
         {
             $this->customer = $data["customer"];
             $this->customer_id = $this->customer->get_id();
         }
+        else if (isset($data["customer_id"]))
+        {
+            $this->customer_id = $data["customer_id"];
+            $this->customer = Customer::select_customer_by_id($data["customer_id"]);
+        }
+        
         $this->username = $data["username"];
-        $this->password = $data["password"];
 
-        if (isset($data["hashed_password"]))
-            $this->hashed_password = $data["hashed_password"];
-        else {
-            $this->hashed_password = sha1(iconv("UTF-8", "ASCII", $this->password));
+        if (isset($data["password"]))
+            $this->password = $data["password"];
+        else if (isset($data["raw_password"])) {
+            $this->password = sha1(iconv("UTF-8", "ASCII", $data["raw_password"]));
         }
     }
 
     public function get_id()
     {
-        return $this->id;
+        if (isset($this->id))
+            return $this->id;
+        else
+            throw new Exception("No ID for login of ".$this->username.". You need to insert it in the database first");
     }
 
     public function get_customer_id()
@@ -50,9 +57,9 @@ class Login extends Model{
         return $this->username;
     }
 
-    public function get_hashed_password()
+    public function get_password()
     {
-        return $this->hashed_password;
+        return $this->password;
     }
 
     public function get_customer()
@@ -68,7 +75,7 @@ class Login extends Model{
         return $ret;
     }
 
-    function insert_login($customer_id, $username, $password){
+    /*function insert_login($customer_id, $username, $password){
         $hashed_password = sha1(iconv("UTF-8", "ASCII", $password));
         $query = "INSERT INTO logins (customer_id, username, password) 
                     VALUES ('".$customer_id."', '".$username."', '".$hashed_password."')";
@@ -79,18 +86,24 @@ class Login extends Model{
         if($ret)
             $count = $ret->rowCount();
         return $count;
-    }
+    }*/
 
     public function insert()
     {
         $query = "INSERT INTO logins (customer_id, username, password)
-                    VALUES ('".$this->customer_id."', '".$this->username."', '".$this->hashed_password."')";
+                    VALUES ('".$this->customer_id."', '".$this->username."', '".$this->password."')";
         $ret = self::execute($query);
         
         // If count == 0 : Error
         $count = 0;
         if($ret)
             $count = $ret->rowCount();
+
+        // Temporary solution, must look for better
+        $query = "SELECT id FROM logins WHERE customer_id = '".$this->customer_id."'";
+        $arr = self::fetchAll($query);
+        $this->id = $arr[0];
+
         return $count;
     }
 }

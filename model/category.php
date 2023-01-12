@@ -1,16 +1,27 @@
 <?php
 
-require_once "model.php";
+require_once "model/model.php";
 
 class Category extends Model {
 
     private $id;
     private $name;
 
+    /**
+     * Create a new Category
+     * Obligatory : id, name
+     */
     public function __construct($data)
     {
-        $this->id = $data["id"];
-        $this->name = $data["name"];
+        if (isset($data["id"]))
+            $this->id = $data["id"];
+        else
+            throw new Exception("No ID set");
+        
+        if (isset($data["name"]))
+            $this->name = $data["name"];
+        else
+            throw new Exception("No name set");
     }
 
     public function get_id()
@@ -24,7 +35,7 @@ class Category extends Model {
     }
 
     /*
-    * Return all categories in the database
+    * Return all categories in the database as an array of "Category"
     */
     public static function select_categories() {
         //$query = "SELECT categories.name FROM categories";
@@ -43,6 +54,17 @@ class Category extends Model {
     public static function select_category_by_id($id)
     {
         $query = "SELECT * FROM categories WHERE id = '".$id."'";
+        $arr = self::fetchAll($query);
+        $ret = new Category($arr[0]);
+        return $ret;
+    }
+    
+    /*
+    * Return a Category instance with the corresponding $name
+    */
+    public static function select_category_by_name($name)
+    {
+        $query = "SELECT * FROM categories WHERE name = '".$name."'";
         $arr = self::fetchAll($query);
         $ret = new Category($arr[0]);
         return $ret;

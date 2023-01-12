@@ -1,5 +1,5 @@
 <?php
-require_once "model.php";
+require_once "model/model.php";
 
 class Customer extends Model{
     private $id;
@@ -13,10 +13,27 @@ class Customer extends Model{
     private $email;
     private $registered;
 
+    /**
+     * Create a new Customer
+     * Obligatory : forname/firstname, surname/lastname, postcode, phone, email
+     */
     public function __construct($data) {
-        $this->id = $data["id"];
-        $this->forname = $data["forname"];
-        $this->surname = $data["surname"];
+        if (isset($data["id"]))
+            $this->id = $data["id"];
+        
+        if (isset($data["forname"]))
+            $this->forname = $data["forname"];
+        else if (isset($data["firstname"]))
+            $this->forname = $data["forname"];
+        else
+            throw new Exception("No forname/firstname set");
+
+        if (isset($data["surname"]))
+            $this->forname = $data["surname"];
+        else if (isset($data["lastname"]))
+            $this->forname = $data["surname"];
+        else
+            throw new Exception("No surname/lastname set for forname ".$this->forname);
 
         if (isset($data["add1"]))
             $this->add1 = $data["add1"];
@@ -33,15 +50,33 @@ class Customer extends Model{
         else
             $this->add3 = "";
 
-        $this->postcode = $data["postcode"];
-        $this->phone = $data["phone"];
-        $this->email = $data["email"];
-        $this->registered = $data["registered"];
+        if (isset("postcode"))
+            $this->postcode = $data["postcode"];
+        else
+            throw new Exception("No postcode set for forname ".$this->forname);
+            
+        if (isset("phone"))
+            $this->phone = $data["phone"];
+        else
+            throw new Exception("No phone set for forname ".$this->forname);
+
+        if (isset("email"))
+            $this->email = $data["email"];
+        else
+            throw new Exception("No email set for forname ".$this->forname);
+
+        if (isset($data["registered"]))
+            $this->registered = $data["registered"];
+        else
+            $this->registered = "1";
     }
 
     public function get_id()
     {
-        return $this->id;
+        if (isset($this->id))
+            return $this->id;
+        else
+            throw new Exception("No ID for Customer ".$this->forname.". You need to insert it in the database first");
     }
 
     public function get_forname()
@@ -93,12 +128,18 @@ class Customer extends Model{
     {
         $query = "INSERT INTO customers (forname, surname, add1, add2, add3, postcode, phone, email, registered)
                     VALUES ('".$this->forname."', '".$this->surname."', '".$this->add1."', '".$this->add2."', '".$this->add3."', '".$this->postcode."', '".$this->phone."', '".$this->email.", 1)";
-        $ret = self::execute($query);
+        $arr = self::execute($query);
         
         // If count == 0 : Error
         $count = 0;
-        if($ret)
-            $count = $ret->rowCount();
+        if($arr)
+            $count = $arr->rowCount();
+
+        // Temporary solution, must look for better
+        $query = "SELECT id FROM customers WHERE email = '".$this->email."'";
+        $arr = self::fetchAll($query);
+        $this->id = $arr[0];
+
         return $count;
     }
 
@@ -109,6 +150,7 @@ class Customer extends Model{
         return $ret;
     }
 
+    /*
     public static function insert_customer($newCustomer){
         $query = "INSERT INTO customers (forname, surname, add1, add2, add3, postcode, phone, email, registered) 
                     VALUES ('".$newCustomer["forname"]."', '".$newCustomer["surname"]."', 'ligne add1', 'ligne add2', '".$newCustomer["city"]."', '".$newCustomer["postcode"]."', '".$newCustomer["phone"]."', '".$newCustomer["email"]."', 1)";
@@ -119,5 +161,5 @@ class Customer extends Model{
         if($ret)
             $count = $ret->rowCount();
         return $count;
-    }
+    }*/
 }
