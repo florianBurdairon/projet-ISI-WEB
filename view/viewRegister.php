@@ -13,21 +13,23 @@
                 <input type="text" name="surname" value="<?php if(isset($_SESSION["autofill"]["register"]["surname"])) echo $_SESSION["autofill"]["register"]["surname"]; ?>">
                 <?php if(isset($errors["missing_surname"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre nom.</div>";?>
                 <br>
-                <label for="username">Pseudo</label>
+                <label for="username">Nom d'utilisateur</label>
                 <input type="text" name="username" value="<?php if(isset($_SESSION["autofill"]["register"]["username"])) echo $_SESSION["autofill"]["register"]["username"]; ?>">
                 <?php if(isset($errors["missing_username"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre adresse email.</div>";?>
+                <?php if(isset($errors["username_already_used"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Nom d'utilisateur déjà utilisé. <a href=\"".ROOT."account/loginpage\">Se connecter</a></div>";?>
+
                 <br>
                 <label for="email">Adresse mail</label>
                 <input type="email" name="email" value="<?php if(isset($_SESSION["autofill"]["register"]["email"])) echo $_SESSION["autofill"]["register"]["email"]; ?>">
                 <?php if(isset($errors["missing_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre adresse email.</div>";?>
-                <?php if(isset($errors["email_already_used"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Adresse email déjà utilisée. <a href=\"?action=loginpage\">Se connecter</a></div>";?>
+                <?php if(isset($errors["email_already_used"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Adresse email déjà utilisée. <a href=\"".ROOT."account/loginpage\">Se connecter</a></div>";?>
                 <br>
-                <label for="password">Mot de passe</label>
-                <input type="password" name="password">
+                <label for="raw_password">Mot de passe</label>
+                <input type="password" name="raw_password">
                 <?php if(isset($errors["missing_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir un mot de passe.</div>";?>
                 <br>
-                <label for="password_confirmation">Confirmation mot de passe</label>
-                <input type="password" name="password2">
+                <label for="raw_password2">Confirmation mot de passe</label>
+                <input type="password" name="raw_password2">
                 <?php if(isset($errors["missing_password2"]) && !isset($errors["missing_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez re-saisir le mot de passe.</div>";?>
                 <?php if(isset($errors["different_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Mots de passe différents.</div>";?>
                 <br>

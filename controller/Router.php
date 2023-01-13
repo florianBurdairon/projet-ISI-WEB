@@ -16,8 +16,8 @@ class Router
     {
         $this->ctrlHome = new HomeController();
         $this->ctrlProducts = new ProductsController();
-        /*$this->ctrlAccount = new AccountController();
-        $this->ctrlShoppingcart = new ShoppingcartController();*/
+        $this->ctrlAccount = new AccountController();
+        $this->ctrlShoppingcart = new ShoppingcartController();
     }
 
     // Traite une requête entrante
@@ -48,10 +48,33 @@ class Router
                         $this->ctrlProducts->select();
                     }
                 } 
-                /*elseif ($_GET['controller'] == 'account') {
+                elseif ($_GET['controller'] == 'account') {
+                    if(isset($_GET['action']) && $_GET['action'] != ""){
+                        if($_GET['action'] == 'loginpage'){
+                            if(!isset($_SESSION["user"])){
+                                $this->ctrlAccount->loginpage();
+                            }
+                            else throw new Exception("Action non valide");
+                        }
+                        elseif($_GET['action'] == 'login'){
+                            if(!isset($_SESSION["user"])){
+                                $this->ctrlAccount->login();
+                            }
+                            else throw new Exception("Action non valide");
+                        }
+                        elseif($_GET['action'] == 'logout'){
+                            if(isset($_SESSION["user"])){
+                                $this->ctrlAccount->logout();
+                            }
+                            else throw new Exception("Action non valide");
+                        }
+                        else throw new Exception("Action non valide");
+                    }
+                    else throw new Exception("Action non valide");
                 } 
                 elseif ($_GET['controller'] == 'shoppingcart') {
-                } */
+                    $this->ctrlShoppingcart->select();
+                }
                 else throw new Exception("Action non valide");
             } else {
                 // aucune action définie : affichage de l'accueil

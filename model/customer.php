@@ -15,23 +15,23 @@ class Customer extends Model{
 
     /**
      * Create a new Customer
-     * Obligatory : forname/firstname, surname/lastname, postcode, phone, email
+     * Obligatory : forname/firstname, surname/lastname, phone, email
      */
     public function __construct($data) {
         if (isset($data["id"]))
             $this->id = $data["id"];
         
-        if (isset($data["forname"]))
+        if (isset($data["forname"]) && $data["forname"] != "")
             $this->forname = $data["forname"];
-        else if (isset($data["firstname"]))
-            $this->forname = $data["forname"];
+        else if (isset($data["firstname"]) && $data["firstname"] != "")
+            $this->forname = $data["firstname"];
         else
             throw new Exception("No forname/firstname set");
 
-        if (isset($data["surname"]))
-            $this->forname = $data["surname"];
-        else if (isset($data["lastname"]))
-            $this->forname = $data["surname"];
+        if (isset($data["surname"]) && $data["surname"] != "")
+            $this->surname = $data["surname"];
+        else if (isset($data["lastname"]) && $data["lastname"] != "")
+            $this->surname = $data["lastname"];
         else
             throw new Exception("No surname/lastname set for forname ".$this->forname);
 
@@ -50,22 +50,20 @@ class Customer extends Model{
         else
             $this->add3 = "";
 
-        if (isset("postcode"))
+        if (isset($data["postcode"]))
             $this->postcode = $data["postcode"];
-        else
-            throw new Exception("No postcode set for forname ".$this->forname);
             
-        if (isset("phone"))
+        if (isset($data["phone"]) && $data["phone"] != "")
             $this->phone = $data["phone"];
         else
             throw new Exception("No phone set for forname ".$this->forname);
 
-        if (isset("email"))
+        if (isset($data["email"]) && $data["email"] != "")
             $this->email = $data["email"];
         else
             throw new Exception("No email set for forname ".$this->forname);
 
-        if (isset($data["registered"]))
+        if (isset($data["registered"]) && $data["registered"] != "")
             $this->registered = $data["registered"];
         else
             $this->registered = "1";
@@ -147,6 +145,13 @@ class Customer extends Model{
         $query = "SELECT * FROM customers WHERE id = '".$id."'";
         $arr = self::fetchAll($query);
         $ret = new Customer($arr[0]);
+        return $ret;
+    }
+
+    public static function check_if_email_already_used($email){
+        $query = "SELECT * FROM customers WHERE email = '".$email."'";
+        $arr = self::fetchAll($query);
+        $ret = $arr->rowCount() > 0;
         return $ret;
     }
 

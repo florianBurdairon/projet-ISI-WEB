@@ -44,7 +44,7 @@ class Product extends Model{
         if (isset($data["description"]))
             $this->description = $data["description"];
         else
-            throw new Exception("No decription set for product ".$this->name.".");
+            throw new Exception("No description set for product ".$this->name.".");
 
         if (isset($data["image"]))
             $this->image = $data["image"];
@@ -52,12 +52,12 @@ class Product extends Model{
             throw new Exception("No image set for product ".$this->name.".");
 
         if (isset($data["price"]))
-            $this->image = $data["price"];
+            $this->price = $data["price"];
         else
             throw new Exception("No price set for product ".$this->name.".");
         
         if (isset($data["quantity"]))
-            $this->image = $data["quantity"];
+            $this->quantity = $data["quantity"];
         else
             throw new Exception("No quantity set for product ".$this->name.".");
     }

@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html" ; charset="utf-8" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="<?= ROOT ?>view/css/style.css">
+        <link rel="stylesheet" href="<?= ROOT ?>assets/css/style.css">
         <title><?= $title?></title>
     </head>
     <body>
@@ -37,18 +37,18 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php 
                                 if(!isset($_SESSION["user"])) echo "Connexion/Inscription";
-                                else echo "Bonjour ".$_SESSION["user"]->get_username();
+                                else echo "Bonjour ".unserialize($_SESSION["user"])->get_surname();
                             ?>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <?php if(isset($_SESSION["user"])):?>
-                                    <a class="dropdown-item" href="?action=account">Accéder à mon compte</a>
+                                    <a class="dropdown-item" href="<?= ROOT ?>account/infos">Accéder à mon compte</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="?action=logout">Se déconnecter</a>
+                                    <a class="dropdown-item" href="<?= ROOT ?>account/logout">Se déconnecter</a>
                                 <?php else : ?>
-                                    <a class="dropdown-item" href="?action=loginpage">Se connecter</a>
+                                    <a class="dropdown-item" href="<?= ROOT ?>account/loginpage">Se connecter</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="?action=registerpage">S'inscrire</a>
+                                    <a class="dropdown-item" href="<?= ROOT ?>account/registerpage">S'inscrire</a>
                                 <?php endif; ?>
                             </div>
                         </li>

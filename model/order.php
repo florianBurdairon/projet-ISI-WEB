@@ -159,6 +159,11 @@ class Order extends Model {
         return $this->total;
     }
 
+    public function get_items()
+    {
+        return $this->items;
+    }
+
     private function calculate_total()
     {
         if (!isset($this->items))
