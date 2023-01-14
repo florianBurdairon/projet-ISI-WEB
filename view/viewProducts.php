@@ -28,6 +28,7 @@
                     $desc = $product->get_description();
                     $price =$product->get_price();
                     ?>
+
                     <!-- HTML -->
                     <div class="d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-5">
                         <div class="border-end bg-white col-5 col-lg-3 col-md-4 col-sm-5 m-2">
@@ -38,8 +39,8 @@
                             <p class="text-md-left text-sm-center"><?= $desc ?></p>
                             <p>Prix : <?= $price ?>€</p>
 
-                            <form class="d-flex flex-column align-items-center" method="post" action="addToShoppingCart.php">
-                                <input type="hidden" name="product" value="<?= $id ?>">
+                            <form class="d-flex flex-column align-items-center" method="post" action="<?= ROOT ?>shoppingcart/insert">
+                                <input type="hidden" name="product_id" value="<?= $id ?>">
                                 <div>
                                     <label for="quantity">Quantity :</label>
                                     <input type="number" id="quantity" name="quantity" value="1" min="1">

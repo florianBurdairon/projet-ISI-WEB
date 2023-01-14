@@ -73,7 +73,17 @@ class Router
                     else throw new Exception("Action non valide");
                 } 
                 elseif ($_GET['controller'] == 'shoppingcart') {
-                    $this->ctrlShoppingcart->select();
+                    if (isset($_GET['action']) && $_GET['action'] != "")
+                    {
+                        if ($_GET['action'] == 'insert'){
+                            $this->ctrlShoppingcart->insert();
+                        }
+                        elseif($_GET['action'] == 'delete'){
+                            $this->ctrlShoppingcart->delete();
+                        }
+                    }
+                    else
+                        $this->ctrlShoppingcart->select();
                 }
                 else throw new Exception("Action non valide");
             } else {

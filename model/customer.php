@@ -126,19 +126,13 @@ class Customer extends Model{
     {
         $query = "INSERT INTO customers (forname, surname, add1, add2, add3, postcode, phone, email, registered)
                     VALUES ('".$this->forname."', '".$this->surname."', '".$this->add1."', '".$this->add2."', '".$this->add3."', '".$this->postcode."', '".$this->phone."', '".$this->email.", 1)";
-        $arr = self::execute($query);
-        
-        // If count == 0 : Error
-        $count = 0;
-        if($arr)
-            $count = $arr->rowCount();
+        $ret = self::insert_get_id($query);
+        $this->id = $ret;
 
-        // Temporary solution, must look for better
-        $query = "SELECT id FROM customers WHERE email = '".$this->email."'";
-        $arr = self::fetchAll($query);
-        $this->id = $arr[0];
+        if ($ret == 0 || $ret = '0')
+            return false;
 
-        return $count;
+        return $ret;
     }
 
     public static function select_customer_by_id($id){
@@ -151,8 +145,8 @@ class Customer extends Model{
     public static function check_if_email_already_used($email){
         $query = "SELECT * FROM customers WHERE email = '".$email."'";
         $arr = self::fetchAll($query);
-        $ret = $arr->rowCount() > 0;
-        return $ret;
+
+        return sizeof($arr)>0;
     }
 
     /*

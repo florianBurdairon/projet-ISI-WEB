@@ -27,4 +27,10 @@ abstract class Model {
         $sth->execute();
         return $sth->fetchAll();
     }
+
+    static protected function insert_get_id($query) {
+        $db = self::get_db();
+        $db->exec($query);
+        return $db->lastInsertId();
+    }
 }

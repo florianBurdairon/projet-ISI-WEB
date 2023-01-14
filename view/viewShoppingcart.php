@@ -10,19 +10,19 @@
                     foreach($orderitems as $orderitem)
                     {
                         $product = $orderitem->get_product();
-                        $id = $product['id'];
-                        $img = $product['image'];
-                        $name = $product['name'];
-                        $desc = $product['description'];
-                        $price =$product['price'];
-                        $quantity =$orderitem['quantity'];
+                        $id = $product->get_id();
+                        $img = $product->get_image();
+                        $name = $product->get_name();
+                        $desc = $product->get_description();
+                        $price = $product->get_price();
+                        $quantity = $orderitem->get_quantity();
                         ?>
 
                         <!-- HTML -->
 
                         <div class="d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-5">
                             <div class="border-end bg-white col-5 col-lg-3 col-md-4 col-sm-5 m-2">
-                                <img class="rounded-circle w-100" src="view/productimages/<?php echo $img ?>" alt="<?php echo $img ?>">
+                                <img class="rounded-circle w-100" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
                             </div>
                             <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
                                 <h3><?php echo $name ?></h3>
@@ -31,8 +31,7 @@
                                 <p>Quantité : <?php echo $quantity ?></p>
                                 <p>Prix total : <?php echo $quantity * $price ?>€</p>
 
-                                <form class="d-flex flex-column align-items-center" method="post" action="shoppingcart.php">
-                                    <input type="hidden" name="operation" value="delete">
+                                <form class="d-flex flex-column align-items-center" method="post" action="<?= ROOT ?>shoppingcart/delete">
                                     <input type="hidden" name="product_id" value="<?php echo $id ?>">
                                     <button type="submit">Retirer du panier</button>
                                 </form>

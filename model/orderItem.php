@@ -76,12 +76,17 @@ class OrderItem extends Model {
 
     public static function select_items_by_order($order_id)
     {
-        $query = "SELECT * FROM order_items WHERE order_id = '".$order_id."'";
+        $query = "SELECT * FROM orderitems WHERE order_id = '".$order_id."'";
         $arr = self::fetchAll($query);
         
         $ret = array();
         foreach($arr as $orderItem)
             array_push($ret, new OrderItem($orderItem));
         return $ret;
+    }
+
+    public function updateQuantity($newValue)
+    {
+        $this->quantity = $newValue;
     }
 }

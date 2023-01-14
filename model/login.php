@@ -108,25 +108,18 @@ class Login extends Model{
     {
         $query = "INSERT INTO logins (customer_id, username, password)
                     VALUES ('".$this->customer_id."', '".$this->username."', '".$this->password."')";
-        $ret = self::execute($query);
-        
-        // If count == 0 : Error
-        $count = 0;
-        if($ret)
-            $count = $ret->rowCount();
+        $ret = self::insert_get_id($query);
+        $this->id = $ret;
 
-        // Temporary solution, must look for better
-        $query = "SELECT id FROM logins WHERE customer_id = '".$this->customer_id."'";
-        $arr = self::fetchAll($query);
-        $this->id = $arr[0];
+        if ($ret == 0 || $ret = '0')
+            return false;
 
-        return $count;
+        return $ret;
     }
 
     public static function check_if_username_already_used($username){
         $query = "SELECT * FROM logins WHERE username = '".$username."'";
         $arr = self::fetchAll($query);
-        $ret = $arr->rowCount() > 0;
-        return $ret;
+        return sizeof($arr)>0;
     }
 }

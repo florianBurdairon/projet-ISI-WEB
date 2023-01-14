@@ -177,4 +177,73 @@ class Order extends Model {
 
         return $total;
     }
+
+    public function insert()
+    {
+        $query = "";
+        if (isset($this->customer_id)) {
+            $query = "INSERT INTO orders (customer_id, registered, status, session, total)
+                        VALUES ('".$this->customer_id."', '".$this->registered."', '".$this->status."', '".session_id()."', '".$this->total."')";
+        }
+        else {
+            $query = "INSERT INTO orders (customer_id, registered, status, session, total)
+                        VALUES ('-1', '".$this->registered."', '".$this->status."', '".session_id()."', '".$this->total."')";
+        }
+
+        $ret = self::insert_get_id($query);
+        $this->id = $ret;
+
+        if ($ret == 0 || $ret = '0')
+            return false;
+
+        return $ret;
+    }
+
+    public function get_index_if_product_in_order($p)
+    {
+        $counter = 0;
+        foreach($this->items as $item) {
+            // Same product
+            if ($p->get_id() == $item->get_product()->get_id()) {
+                return $counter;
+            }
+            $counter++;
+        }
+
+        return -1;
+    }
+
+    public function add_or_update_item($item)
+    {
+        $ind = $this->get_index_if_product_in_order($item->get_product());
+
+        // Not already present
+        if ($ind == -1) {
+            array_push($this->items, $item);
+        }
+        else {
+            $this->items[$ind]->updateQuantity($this->items[$ind]->get_quantity() + $item->get_quantity());
+        }
+
+        $this->calculate_total();
+    }
+
+    public function delete_product($product)
+    {
+        $ind = $this->get_index_if_product_in_order($product);
+
+        if ($ind == -1){
+            throw new Exception("Can not delete a product that is not in the shopping cart");
+        }
+        else {
+            unset($this->items[$ind]);
+        }
+
+        $this->calculate_total();
+    }
+
+    public function insert_items()
+    {
+        
+    }
 }
