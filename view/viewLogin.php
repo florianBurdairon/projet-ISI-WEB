@@ -4,7 +4,7 @@
             <h1 class="mt-4">Connexion</h1>
             <form method="post" action="login">
                 <label for="username">Nom d'utilisateur</label>
-                <input type="text" name="username" value="<?php if(isset($_SESSION["autofill"]["login"]["username"])) echo $_SESSION["autofill"]["login"]["username"]; ?>">
+                <input type="text" name="username" value="<?php if(isset($autofill["username"])) echo $autofill["username"]; ?>">
                 <?php if(isset($errors["missing_username"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir un nom d'utilisateur.</div>";?>
                 <?php if(isset($errors["wrong_username"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Nom d'utilisateur inconnu. <a href=\"".ROOT."account/registerpage\">S'inscrire</a></div>";?>
                 <br>

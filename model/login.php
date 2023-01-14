@@ -91,6 +91,19 @@ class Login extends Model{
             return false;
     }
 
+    public static function select_login_by_customer_id($customer_id)
+    {
+        $query = "SELECT * FROM logins WHERE customer_id = '".$customer_id."'";
+        $arr = self::fetchAll($query);
+        if (count($arr) > 0)
+        {
+            $ret = new Login($arr[0]);
+            return $ret;
+        }
+        else
+            return false;
+    }
+
     /*function insert_login($customer_id, $username, $password){
         $hashed_password = sha1(iconv("UTF-8", "ASCII", $password));
         $query = "INSERT INTO logins (customer_id, username, password) 
@@ -110,9 +123,6 @@ class Login extends Model{
                     VALUES ('".$this->customer_id."', '".$this->username."', '".$this->password."')";
         $ret = self::insert_get_id($query);
         $this->id = $ret;
-
-        if ($ret == 0 || $ret = '0')
-            return false;
 
         return $ret;
     }

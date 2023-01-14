@@ -7,22 +7,26 @@
                     <tr>
                         <th>Nom</td>
                         <th>Prénom</th>
-                        <th>Pseudo</th>
-                        <th>Email</td>
-                        <th>Téléphone</td>
+                        <th>Nom d'utilisateur</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Adresse</th>
+                        <th>Complément d'adresse</th>
                         <th>Ville</th>
                         <th>Code postal</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><?=$_SESSION["user"]["surname"]?></td>
-                        <td><?=$_SESSION["user"]["forname"]?></td>
-                        <td><?=$_SESSION["user"]["username"]?></td>
-                        <td><?=$_SESSION["user"]["email"]?></td>
-                        <td><?=$_SESSION["user"]["phone"]?></td>
-                        <td><?=$_SESSION["user"]["add3"]?></td>
-                        <td><?=$_SESSION["user"]["postcode"]?></td>
+                        <td><?=(($user != null) ? $user->get_surname() : "");?></td>
+                        <td><?=(($user != null) ? $user->get_forname() : "");?></td>
+                        <td><?=(($user != null) ? $login->get_username() : "");?></td>
+                        <td><?=(($user != null) ? $user->get_email() : "");?></td>
+                        <td><?=(($user != null) ? $user->get_phone() : "");?></td>
+                        <td><?=(($user != null) ? $user->get_add1() : "");?></td>
+                        <td><?=(($user != null) ? $user->get_add2() : "");?></td>
+                        <td><?=(($user != null) ? $user->get_add3() : "");?></td>
+                        <td><?=(($user != null) ? $user->get_postcode() : "");?></td>
                     </tr>
                 </tbody>
             </table>

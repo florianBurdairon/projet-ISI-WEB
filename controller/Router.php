@@ -54,19 +54,37 @@ class Router
                             if(!isset($_SESSION["user"])){
                                 $this->ctrlAccount->loginpage();
                             }
-                            else throw new Exception("Action non valide");
+                            else throw new Exception("Utilisateur déjà connecté");
                         }
                         elseif($_GET['action'] == 'login'){
                             if(!isset($_SESSION["user"])){
                                 $this->ctrlAccount->login();
                             }
-                            else throw new Exception("Action non valide");
+                            else throw new Exception("Utilisateur déjà connecté");
+                        }
+                        elseif($_GET['action'] == 'registerpage'){
+                            if(!isset($_SESSION["user"])){
+                                $this->ctrlAccount->registerpage();
+                            }
+                            else throw new Exception("Utilisateur déjà connecté");
+                        }
+                        elseif($_GET['action'] == 'register'){
+                            if(!isset($_SESSION["user"])){
+                                $this->ctrlAccount->register();
+                            }
+                            else throw new Exception("Utilisateur déjà connecté");
                         }
                         elseif($_GET['action'] == 'logout'){
                             if(isset($_SESSION["user"])){
                                 $this->ctrlAccount->logout();
                             }
-                            else throw new Exception("Action non valide");
+                            else throw new Exception("Aucun utilisateur connecté");
+                        }
+                        elseif($_GET['action'] == 'infos'){
+                            if(isset($_SESSION["user"])){
+                                $this->ctrlAccount->infos();
+                            }
+                            else throw new Exception("Aucun utilisateur connecté");
                         }
                         else throw new Exception("Action non valide");
                     }

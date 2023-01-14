@@ -125,12 +125,9 @@ class Customer extends Model{
     public function insert()
     {
         $query = "INSERT INTO customers (forname, surname, add1, add2, add3, postcode, phone, email, registered)
-                    VALUES ('".$this->forname."', '".$this->surname."', '".$this->add1."', '".$this->add2."', '".$this->add3."', '".$this->postcode."', '".$this->phone."', '".$this->email.", 1)";
+                    VALUES ('".$this->forname."', '".$this->surname."', '".$this->add1."', '".$this->add2."', '".$this->add3."', '".$this->postcode."', '".$this->phone."', '".$this->email."', 1)";
         $ret = self::insert_get_id($query);
         $this->id = $ret;
-
-        if ($ret == 0 || $ret = '0')
-            return false;
 
         return $ret;
     }

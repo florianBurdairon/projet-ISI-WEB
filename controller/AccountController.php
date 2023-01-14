@@ -70,14 +70,14 @@ class AccountController
                     else{
                         $_SESSION["error"]["register"][$error_count] = "error_insert_login";
                         $error_count++;
-                        $_SESSION["autofill"]["register"] = serialize($customer);
+                        $_SESSION["autofill"]["register"] = $_POST;
                         header("Location: registerpage");
                     }
                 }
                 else{
                     $_SESSION["error"]["register"][$error_count] = "error_insert_customer";
                     $error_count++;
-                    $_SESSION["autofill"]["register"] = serialize($customer);
+                    $_SESSION["autofill"]["register"] = $_POST;
                     header("Location: registerpage");
                 }
             }
@@ -100,11 +100,11 @@ class AccountController
                 $_SESSION["error"]["register"][$error_count] = "missing_email";
                 $error_count++;
             }
-            if(!isset($_POST["password"]) || $_POST["password"] == ''){
+            if(!isset($_POST["raw_password"]) || $_POST["raw_password"] == ''){
                 $_SESSION["error"]["register"][$error_count] = "missing_password";
                 $error_count++;
             }
-            if((!isset($_POST["password2"]) || $_POST["password2"] == '') && (isset($_POST["password"]) && $_POST["password"] != '')){
+            if((!isset($_POST["raw_password2"]) || $_POST["raw_password2"] == '') && (isset($_POST["raw_password"]) && $_POST["raw_password"] != '')){
                 $_SESSION["error"]["register"][$error_count] = "missing_password2";
                 $error_count++;
             }
@@ -118,14 +118,6 @@ class AccountController
             } 
             if(!isset($_POST["username"]) || $_POST["username"] == ''){
                 $_SESSION["error"]["register"][$error_count] = "missing_username";
-                $error_count++;
-            } 
-            if(!isset($_POST["city"]) || $_POST["city"] == ''){
-                $_SESSION["error"]["register"][$error_count] = "missing_city";
-                $error_count++;
-            } 
-            if(!isset($_POST["postcode"]) || $_POST["postcode"] == ''){
-                $_SESSION["error"]["register"][$error_count] = "missing_postcode";
                 $error_count++;
             } 
             if(!isset($_POST["phone"]) || $_POST["phone"] == ''){
@@ -161,15 +153,36 @@ class AccountController
             }
         }
 
-        if(isset($_SESSION["user"])) header("Location: ".ROOT."home");
+        $autofill = isset($_SESSION["autofill"]["login"]) ? $_SESSION["autofill"]["login"] : array();
+
         $view = new View("Login", "Connexion");
-        $view->generate(array("errors" => $errors));
+        $view->generate(array("errors" => $errors, "autofill" => $autofill));
     }
 
     public function registerpage()
     {
-        if(isset($_SESSION["user"])) header("Location: ".ROOT."home");
+        $errors = array();
+        if(isset($_SESSION["error"]["register"])){
+            if(is_array($_SESSION["error"]["register"])){
+                foreach($_SESSION["error"]["register"] as $error){
+                    $errors[$error] = true;
+                }
+            }
+            else{
+                $errors[$_SESSION["error"]["register"]] = true;
+            }
+        }
+
+        $autofill = isset($_SESSION["autofill"]["register"]) ? $_SESSION["autofill"]["register"] : array();
+
         $view = new View("Register", "Inscription");
-        $view->generate(array());
+        $view->generate(array("errors" => $errors, "autofill" => $autofill));
+    }
+
+    public function infos()
+    {
+        $login = Login::select_login_by_customer_id(unserialize($_SESSION["user"])->get_id());
+        $view = new View("Account", "Mon compte");
+        $view->generate(array("login" => $login));
     }
 }

@@ -36,12 +36,12 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php 
-                                if(!isset($_SESSION["user"])) echo "Connexion/Inscription";
-                                else echo "Bonjour ".unserialize($_SESSION["user"])->get_surname();
+                                if($user != null) echo "Bonjour ".$user->get_surname();
+                                else echo "Connexion/Inscription";
                             ?>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <?php if(isset($_SESSION["user"])):?>
+                                <?php if($user != null):?>
                                     <a class="dropdown-item" href="<?= ROOT ?>account/infos">Accéder à mon compte</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="<?= ROOT ?>account/logout">Se déconnecter</a>
