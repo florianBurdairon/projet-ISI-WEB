@@ -113,18 +113,9 @@ class DeliveryAdd extends Model{
     {
         $query = "INSERT INTO delivery_addresses (firstname, lastname, add1, add2, city, postcode, phone, email)
                     VALUES ('".$this->forname."', '".$this->surname."', '".$this->add1."', '".$this->add2."', '".$this->city."', '".$this->postcode."', '".$this->phone."', '".$this->email."')";
-        $arr = self::execute($query);
-        
-        // If count == 0 : Error
-        $count = 0;
-        if($arr)
-            $count = $arr->rowCount();
+        $ret = self::insert_get_id($query);
+        $this->id = $ret;
 
-        // Temporary solution, must look for better
-        $query = "SELECT id FROM delivery_adresses WHERE email = '".$this->email."' AND add1 = '".$this->add1."' AND add2 = '".$this->add2."' AND city = '".$this->city."'";
-        $arr = self::fetchAll($query);
-        $this->id = $arr[0];
-
-        return $count;
+        return $ret;
     }
 }

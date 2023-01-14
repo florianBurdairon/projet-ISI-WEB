@@ -85,8 +85,31 @@ class OrderItem extends Model {
         return $ret;
     }
 
-    public function updateQuantity($newValue)
+    public function update_quantity($newValue)
     {
         $this->quantity = $newValue;
+    }
+
+    public function insert()
+    {
+        $query = "INSERT INTO orderitems (order_id, product_id, quantity)
+                    VALUES ('".$this->order_id."', '".$this->product_id."', '".$this->quantity."')";
+        
+        $ret = self::insert_get_id($query);
+        $this->id = $ret;
+        
+        return $ret;
+    }
+
+    public function update_in_db()
+    {
+        $query = "UPDATE orderitems SET quantity = '".$this->quantity."' WHERE id = '".$this->id."'";
+        self::execute($query);
+    }
+
+    public function delete_from_db()
+    {
+        $query = "DELETE FROM orderitems WHERE id = '".$this->id."'";
+        self::execute($query);
     }
 }

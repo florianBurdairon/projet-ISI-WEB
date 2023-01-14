@@ -1,7 +1,7 @@
 <?php
 abstract class Model {
     private static function get_db() {
-        $dsn = 'mysql:host=localhost;dbname=web4shop';
+        $dsn = 'mysql:host=localhost;dbname=web4shop;charset=utf8';
         $username = 'root';
         $password = '';
         try {

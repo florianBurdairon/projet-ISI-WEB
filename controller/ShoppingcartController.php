@@ -4,55 +4,70 @@ require_once 'view/view.php';
 
 class ShoppingcartController
 {
+    private function look_for_shoppingcart()
+    {
+        // Create a new shopping cart if no existing yet
+        if (!isset($_SESSION["shoppingcart"]))
+        {
+            $old = Order::check_if_order_for_session(session_id());
+            if (!$old)
+            {
+                $data = array();
+                if (isset($_SESSION["user"]))
+                {
+                    $customer = unserialize($_SESSION["user"]);
+                    $old = Order::check_if_order_for_customer($customer);
+                    if ($old)
+                    {
+                        $_SESSION["shoppingcart"] = serialize($old);
+                        return;
+                    }
+                    $data["customer"] = $customer;
+                    $data["registered"] = 1;
+                }
+                $order = new Order($data);
+                $order->insert();
+                $_SESSION["shoppingcart"] = serialize($order);
+            } else {
+                $_SESSION["shoppingcart"] = serialize($old);
+            }
+        }
+    }
+
     public function select()
     {
+        self::look_for_shoppingcart();
+
         if (isset($_SESSION["shoppingcart"]))
         {
             $orderitems = unserialize($_SESSION["shoppingcart"])->get_items();
             $view = new View("Shoppingcart", "Panier");
-            $view->generate(array('orderitems' => $orderitems));
-        }
-        else
-        {
-            $view = new View("Shoppingcart", "Panier");
-            $view->generate(array());
+            if (sizeof($orderitems) > 0)
+            {
+                $view->generate(array('orderitems' => $orderitems));
+            }
+            else
+            {
+                $view->generate(array());
+            }
         }
     }
 
     public function insert()
     {
-        // Create a new shopping cart if no existing yet
-        if (!isset($_SESSION["shoppingcart"]))
-        {
-            $data = array();
-            if (isset($_SESSION["user"]))
-            {
-                $data["customer"] = unserialize($_SESSION["user"]);
-                $data["registered"] = 1;
-            }
-            $order = new Order($data);
-            $order->insert();
-            $_SESSION["shoppingcart"] = serialize($order);
-        }
+        self::look_for_shoppingcart();
 
         // Insert the product from $_POST
         if(isset($_POST["product_id"]) && isset($_POST["quantity"])){
-            $data = array("order_id" => unserialize($_SESSION["shoppingcart"])->get_id(), "product_id" => $_POST["product_id"], "quantity" => $_POST["quantity"]);
-            $item = new OrderItem($data);
             $order = unserialize($_SESSION["shoppingcart"]);
+            $data = array("order_id" => $order->get_id(), "product_id" => $_POST["product_id"], "quantity" => $_POST["quantity"]);
+            $item = new OrderItem($data);
             $order->add_or_update_item($item);
             $_SESSION["shoppingcart"] = serialize($order);
         }
 
         // Redirect to precedent page
-        /**
-         * #######  ###     ####   ###
-         *    #    #   #    #   # #   #
-         *    #    #   #    #   # #   #
-         *    #    #   #    #   # #   #
-         *    #     ###     ####   ###
-         */
-        $this->select();
+        header("Location: ".ROOT.BACKTOPAGE);
     }
 
     public function delete()
@@ -60,23 +75,20 @@ class ShoppingcartController
         if (!isset($_SESSION["shoppingcart"]))
             throw new Exception("Can not delete products from non-existing shopping cart");
         
-        
         // Delete the product from $_POST
         if(isset($_POST["product_id"])){
             $order = unserialize($_SESSION["shoppingcart"]);
             $product = Product::select_product_by_id($_POST["product_id"]);
             $order->delete_product($product);
-            $_SESSION["shoppingcart"] = serialize($order);
+            if (sizeof($order->get_items()) == 0)
+            {
+                unset($_SESSION["shoppingcart"]);
+            }
+            else {
+                $_SESSION["shoppingcart"] = serialize($order);
+            }
         }
         
-        // Redirect to shopping cart
-        /**
-         * #######  ###     ####   ###
-         *    #    #   #    #   # #   #
-         *    #    #   #    #   # #   #
-         *    #    #   #    #   # #   #
-         *    #     ###     ####   ###
-         */
-        $this->select();
+        header("Location: ".ROOT."shoppingcart");
     }
 }

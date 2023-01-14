@@ -25,6 +25,10 @@ class Router
     {
         try {
             if (isset($_GET['controller']) && $_GET['controller'] != '') {
+                if($_GET['controller'] != 'account') {
+                    unset($_SESSION["error"]);
+                    unset($_SESSION["autofill"]);
+                }
                 if ($_GET['controller'] == 'home') {
                     $this->ctrlHome->index();
                 } 
@@ -32,7 +36,7 @@ class Router
                     if(isset($_GET['action']) && $_GET['action'] != ""){
                         if($_GET['action'] == 'cat'){
                             $cat_id = null;
-                            if(isset($_GET["id"])){
+                            if(isset($_GET["id"]) && $_GET["id"] != ""){
                                 $cat_id = $_GET["id"];
                                 $category = Category::select_category_by_id($cat_id);
                                 if($category != null){

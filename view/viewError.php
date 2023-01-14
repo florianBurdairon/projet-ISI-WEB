@@ -2,4 +2,4 @@
 <br>
 <p><?=$msgError?></p>
 <br>
-<p><a href="<?= ROOT ?>home">Accueil</a></p>
+<p><a href="<?= ROOT.BACKTOPAGE ?>">Retour</a></p>

@@ -18,6 +18,23 @@ class AccountController
                     $_SESSION["user"] = serialize($db_login->get_customer());
                     unset($_SESSION["error"]["login"]);
                     unset($_SESSION["autofill"]["login"]);
+
+                    // Update shoppingcart with user infos
+                    if (isset($_SESSION["shoppingcart"]))
+                    {
+                        $old = Order::check_if_order_for_customer($db_login->get_customer());
+                        if ($old)
+                        {
+                            $_SESSION["shoppingcart"] = serialize($old);
+                        }
+                        else {
+                            $order = unserialize($_SESSION["shoppingcart"]);
+                            $order->set_customer($db_login->get_customer());
+
+                            $_SESSION["shoppingcart"] = serialize($order);
+                        }
+                    }
+
                     header("Location: ".ROOT."home");
                 }
                 else{
@@ -65,6 +82,14 @@ class AccountController
                         $_SESSION["user"] = serialize($customer);
                         unset($_SESSION["error"]["register"]);
                         unset($_SESSION["autofill"]["register"]);
+
+                        // Update shoppingcart with user infos
+                        if (isset($_SESSION["shoppingcart"]))
+                        {
+                            $order = unserialize($_SESSION["shoppingcart"]);
+                            $order->set_customer($customer);
+                        }
+
                         header("Location: ".ROOT."home");
                     }
                     else{
@@ -136,6 +161,7 @@ class AccountController
     public function logout()
     {
         unset($_SESSION["user"]);
+        unset($_SESSION["shoppingcart"]);
         header("Location: ".ROOT."home");
     }
 

@@ -9,6 +9,8 @@ foreach($_GET as $param){
     $skipfirst = false;
 }
 define('ROOT', $root);
+$backToPage = isset($_SESSION["backToPage"]) ? $_SESSION["backToPage"] : "/";
+define('BACKTOPAGE', $backToPage);
 
 require_once "controller/Router.php";
 $router = new Router();

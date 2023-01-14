@@ -30,23 +30,27 @@ class Order extends Model {
         if (isset($data["id"]))
             $this->id = $data["id"];
         
-        if (isset($data["customer_id"]))
-        {
-            $this->customer_id = $data["customer_id"];
-            $this->customer = Customer::select_customer_by_id($this->customer_id);
-        }
-        else if (isset($data["customer"]))
-        {
-            $this->customer = $data["customer"];
-            $this->customer_id = $this->customer->get_id();
-        }
-
         if (isset($data["registered"]))
             $this->registered = $data["registered"];
         else if (isset($_SESSION["user"]))
             $this->registered = 1;
         else
             $this->registered = 0;
+
+        
+        if ($this->registered != 0)
+        {
+            if (isset($data["customer_id"]))
+            {
+                $this->customer_id = $data["customer_id"];
+                $this->customer = Customer::select_customer_by_id($this->customer_id);
+            }
+            else if (isset($data["customer"]))
+            {
+                $this->customer = $data["customer"];
+                $this->customer_id = $this->customer->get_id();
+            }
+        }
 
         if (isset($data["delivery_add_id"]))
         {
@@ -178,6 +182,40 @@ class Order extends Model {
         return $total;
     }
 
+    public function set_customer($customer)
+    {
+        $this->customer = $customer;
+        $this->customer_id = $customer->get_id();
+        $this->registered = 1;
+
+        /*
+        self::change_address(new DeliveryAdd(array(
+            "firstname" => $customer->get_forname(),
+            "lastname" => $customer->get_surname(),
+            "add1" => $customer->get_add1(),
+            "add2" => $customer->get_add2(),
+            "city" => $customer->get_add3(),
+            "postcode" => $customer->get_postcode(),
+            "phone" => $customer->get_phone(),
+            "email" => $customer->get_email())));
+            */
+        
+        $query = "UPDATE orders SET customer_id = '".$this->customer_id."', registered = '1' WHERE id = '".$this->id."'";
+        self::execute($query);
+    }
+    
+    public function change_address($del_add)
+    {
+        $this->delivery_add = $del_add;
+        $this->delivery_add->insert();
+        $this->delivery_add_id = $this->delivery_add->get_id();
+
+        $this->status = '1';
+
+        $query = "UPDATE orders SET delivery_add_id = '".$this->delivery_add_id."', status = '".$this->status."' WHERE id = '".$this->id."'";
+        self::execute($query);
+    }
+
     public function insert()
     {
         $query = "";
@@ -192,9 +230,6 @@ class Order extends Model {
 
         $ret = self::insert_get_id($query);
         $this->id = $ret;
-
-        if ($ret == 0 || $ret = '0')
-            return false;
 
         return $ret;
     }
@@ -220,9 +255,11 @@ class Order extends Model {
         // Not already present
         if ($ind == -1) {
             array_push($this->items, $item);
+            $item->insert();
         }
         else {
-            $this->items[$ind]->updateQuantity($this->items[$ind]->get_quantity() + $item->get_quantity());
+            $this->items[$ind]->update_quantity($this->items[$ind]->get_quantity() + $item->get_quantity());
+            $this->items[$ind]->update_in_db();
         }
 
         $this->calculate_total();
@@ -236,14 +273,32 @@ class Order extends Model {
             throw new Exception("Can not delete a product that is not in the shopping cart");
         }
         else {
+            $this->items[$ind]->delete_from_db();
             unset($this->items[$ind]);
         }
 
         $this->calculate_total();
     }
 
-    public function insert_items()
+    public static function check_if_order_for_session($id_session)
     {
-        
+        $query = "SELECT * from orders WHERE registered = '0' AND (status = '0' OR status ='1') AND session = '".$id_session."'";
+        $ret = self::fetchAll($query);
+
+        if (sizeof($ret) > 0)
+            return new Order($ret[0]);
+        else
+            return false;
+    }
+
+    public static function check_if_order_for_customer($customer)
+    {
+        $query = "SELECT * from orders WHERE registered = '1' AND (status = '0' OR status ='1') AND customer_id = '".$customer->get_id()."'";
+        $ret = self::fetchAll($query);
+
+        if (sizeof($ret) > 0)
+            return new Order($ret[0]);
+        else
+            return false;
     }
 }
