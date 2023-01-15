@@ -101,14 +101,6 @@ class DeliveryAdd extends Model{
         return $this->email;
     }
 
-    public static function select_delivery_address_by_id($id)
-    {
-        $query = "SELECT * FROM delivery_addresses WHERE id = '".$id."'";
-        $arr = self::fetchAll($query);
-        $ret = $arr[0];
-        return $ret;
-    }
-
     public function insert()
     {
         $query = "INSERT INTO delivery_addresses (firstname, lastname, add1, add2, city, postcode, phone, email)
@@ -117,5 +109,28 @@ class DeliveryAdd extends Model{
         $this->id = $ret;
 
         return $ret;
+    }
+
+    public static function select_delivery_address_by_id($id)
+    {
+        $query = "SELECT * FROM delivery_addresses WHERE id = '".$id."'";
+        $arr = self::fetchAll($query);
+        $ret = $arr[0];
+        return $ret;
+    }
+
+    public static function create_address_from_customer($customer)
+    {
+        $dev = new DeliveryAdd(array(
+            "firstname" => $customer->get_forname(),
+            "lastname" => $customer->get_surname(),
+            "add1" => $customer->get_add1(),
+            "add2" => $customer->get_add2(),
+            "city" => $customer->get_add3(),
+            "postcode" => $customer->get_postcode(),
+            "phone" => $customer->get_phone(),
+            "email" => $customer->get_email()));
+
+        return $dev;
     }
 }

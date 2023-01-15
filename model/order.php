@@ -262,7 +262,7 @@ class Order extends Model {
             $this->items[$ind]->update_in_db();
         }
 
-        $this->calculate_total();
+        $this->total = self::calculate_total();
     }
 
     public function delete_product($product)
@@ -274,10 +274,15 @@ class Order extends Model {
         }
         else {
             $this->items[$ind]->delete_from_db();
-            unset($this->items[$ind]);
+
+            for ($i = $ind; $i < sizeof($this->items) - 2; $i++)
+            {
+                $this->items[$i] = $this->items[$i+1];
+            }
+            unset($this->items[sizeof($this->items) - 1]);
         }
 
-        $this->calculate_total();
+        $this->total = self::calculate_total();
     }
 
     public static function check_if_order_for_session($id_session)

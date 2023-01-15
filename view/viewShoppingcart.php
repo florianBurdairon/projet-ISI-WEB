@@ -1,10 +1,26 @@
-<div class="d-sm-inline-flex d-flex" id="wrapper">
+<div class="d-sm-inline-flex d-flex w-100" id="wrapper">
+    <div class="border-end border-right bg-white col-lg-2 col-md-3 col-sm-3" id="sidebar-wrapper">
+        <h2>Nos offres</h2>
+        <nav>
+            <ul>
+                <?php
+                foreach($categories as $cat)
+                {
+                    $id = $cat->get_id();
+                    $name = $cat->get_name();
+                    $path = ROOT."products/cat/".$id;
+                    echo "<li><a href='$path'>$name</a></li>";
+                }
+                ?>
+            </ul>
+        </nav>
+    </div>
     <div><!-- class="col-lg-8 col-md-7 col-sm-6 col-xs-5" id="page-content-wrapper">-->
-        <div class="container-fluid">
+        <div class="container-fluid ">
+
             <h1 class="mt-4">Panier</h1>
 
             <?php
-
                 if (isset($orderitems))
                 {
                     foreach($orderitems as $orderitem)
@@ -37,12 +53,21 @@
                                 </form>
                             </div>
                         </div>
+
+
                         <?php
                     }
+
+                    echo "<p> Prix total de la commande : ".$total."</p>";
+                    echo "<a href=\"".ROOT."shoppingcart/pay/selectaddress\"> Payer </a>";
                 }
                 else
                 {
-                    echo "Pas de panier déjà existant.";
+                    ?>
+                    
+                    <p>Aucun produit dans le panier.</p>
+
+                    <?php
                 }
             ?>
 

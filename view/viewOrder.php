@@ -6,7 +6,7 @@
                 <p>Numéro de commande : <?= $order->get_id() ?></p>
                 <p>Type de paiement : <?= $order->get_payment_type() ?></p>
                 <?php 
-                    $date = DateTime::createFromFormat();
+                    //$date = DateTime::createFromFormat();
                 ?>
                 <p>Date : <?= $order->get_date() ?></p>
                 <p><?= $order->get_status() ?></p>

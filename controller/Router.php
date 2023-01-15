@@ -103,6 +103,16 @@ class Router
                         elseif($_GET['action'] == 'delete'){
                             $this->ctrlShoppingcart->delete();
                         }
+                        elseif($_GET['action'] == 'pay'){
+                            if (isset($_GET['id'])) {
+                                if ($_GET['id'] == 'selectaddress'){
+                                    $this->ctrlShoppingcart->select_address();
+                                }
+                                if ($_GET["id"] == "choiceaddress") {
+                                    $this->ctrlShoppingcart->save_address();
+                                }
+                            }
+                        }
                     }
                     else
                         $this->ctrlShoppingcart->select();

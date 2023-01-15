@@ -40,15 +40,18 @@ class ShoppingcartController
 
         if (isset($_SESSION["shoppingcart"]))
         {
-            $orderitems = unserialize($_SESSION["shoppingcart"])->get_items();
+            $order = unserialize($_SESSION["shoppingcart"]);
+            $orderitems = $order->get_items();
+            $categories = Category::select_categories();
+
             $view = new View("Shoppingcart", "Panier");
             if (sizeof($orderitems) > 0)
             {
-                $view->generate(array('orderitems' => $orderitems));
+                $view->generate(array('orderitems' => $orderitems, 'total' => $order->get_total(), 'categories' => $categories));
             }
             else
             {
-                $view->generate(array());
+                $view->generate(array('categories' => $categories));
             }
         }
     }
@@ -90,5 +93,24 @@ class ShoppingcartController
         }
         
         header("Location: ".ROOT."shoppingcart");
+    }
+
+    public function select_address()
+    {
+        $param = array();
+        if (isset($_SESSION["user"]))
+        {
+            $customer = unserialize($_SESSION["user"]);
+            $customer_address = DeliveryAdd::create_address_from_customer($customer);
+            $param["customer_address"] = $customer_address;
+        }
+        
+        $view = new View("OrderAddress", "Panier");
+        $view->generate($param);
+    }
+
+    public function save_address()
+    {
+
     }
 }
