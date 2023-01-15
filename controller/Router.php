@@ -90,6 +90,17 @@ class Router
                             }
                             else throw new Exception("Aucun utilisateur connecté");
                         }
+                        elseif($_GET['action'] == 'orders'){
+                            if(isset($_SESSION["user"])){
+                                if(isset($_GET["id"]) && $_GET["id"] != ""){
+                                    $this->ctrlAccount->select_order_by_id($_GET["id"]);
+                                }
+                                else{
+                                    $this->ctrlAccount->select_orders();
+                                }
+                            }
+                            else throw new Exception("Aucun utilisateur connecté");
+                        }
                         else throw new Exception("Action non valide");
                     }
                     else throw new Exception("Action non valide");

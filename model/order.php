@@ -301,4 +301,45 @@ class Order extends Model {
         else
             return false;
     }
+
+    public static function select_order_by_id($id)
+    {
+        $query = "SELECT * FROM orders WHERE id = '".$id."' AND status > 0";
+        $arr = self::fetchAll($query);
+        $ret = new Order($arr[0]);
+        return $ret;
+    }
+
+    public static function select_order_by_id_customer_id($id, $customer_id)
+    {
+        $query = "SELECT * FROM orders WHERE id = '".$id."' AND customer_id = '".$customer_id."'AND status > 0";
+        $arr = self::fetchAll($query);
+        if(isset($arr[0])){
+            $ret = new Order($arr[0]);
+            return $ret;
+        }
+        else throw new Exception("Cette commande n'existe pas ou n'est pas associée à cet utilisateur.");
+    }
+
+    public static function select_orders()
+    {
+        $query = "SELECT * FROM orders WHERE status > 0";
+        $arr = self::fetchAll($query);
+
+        $ret = array();
+        foreach($arr as $order)
+            array_push($ret, new Order($order));
+        return $ret;
+    }
+
+    public static function select_orders_by_customer_id($customer_id)
+    {
+        $query = "SELECT * FROM orders WHERE status > 0 AND customer_id ='".$customer_id."'";
+        $arr = self::fetchAll($query);
+
+        $ret = array();
+        foreach($arr as $order)
+            array_push($ret, new Order($order));
+        return $ret;
+    }
 }

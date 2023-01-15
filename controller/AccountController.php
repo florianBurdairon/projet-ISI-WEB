@@ -1,6 +1,8 @@
 <?php
 require_once 'model/customer.php';
 require_once 'model/login.php';
+require_once 'model/order.php';
+require_once 'model/orderItem.php';
 require_once 'view/view.php';
 
 class AccountController
@@ -35,7 +37,7 @@ class AccountController
                         }
                     }
 
-                    header("Location: ".ROOT."home");
+                    header("Location: ".ROOT.BACKTOPAGE);
                 }
                 else{
                     $_SESSION["error"]["login"][$error_count] = "wrong_password";
@@ -90,7 +92,7 @@ class AccountController
                             $order->set_customer($customer);
                         }
 
-                        header("Location: ".ROOT."home");
+                        header("Location: ".ROOT.BACKTOPAGE);
                     }
                     else{
                         $_SESSION["error"]["register"][$error_count] = "error_insert_login";
@@ -162,6 +164,7 @@ class AccountController
     {
         unset($_SESSION["user"]);
         unset($_SESSION["shoppingcart"]);
+        $_SESSION["backToPage"] = "";
         header("Location: ".ROOT."home");
     }
 
@@ -210,5 +213,18 @@ class AccountController
         $login = Login::select_login_by_customer_id(unserialize($_SESSION["user"])->get_id());
         $view = new View("Account", "Mon compte");
         $view->generate(array("login" => $login));
+    }
+
+    public function select_orders(){
+        $orders = Order::select_orders_by_customer_id(unserialize($_SESSION["user"])->get_id());
+        $view = new View("OrderList", "Mes commandes");
+        $view->generate(array("orders" => $orders));
+    }
+
+    public function select_order_by_id($id){
+        $order = Order::select_order_by_id_customer_id($id, unserialize($_SESSION["user"])->get_id());
+        $orderitems = OrderItem::select_items_by_order($order->get_id());
+        $view = new View("Order", "Détails de la commande");
+        $view->generate(array("order" => $order, "orderitems" => $orderitems));
     }
 }

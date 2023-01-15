@@ -44,6 +44,8 @@
                                 <?php if($user != null):?>
                                     <a class="dropdown-item" href="<?= ROOT ?>account/infos">Accéder à mon compte</a>
                                     <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="<?= ROOT ?>account/orders">Accéder à mes commandes</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="<?= ROOT ?>account/logout">Se déconnecter</a>
                                 <?php else : ?>
                                     <a class="dropdown-item" href="<?= ROOT ?>account/loginpage">Se connecter</a>
