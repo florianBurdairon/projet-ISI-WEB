@@ -104,12 +104,21 @@ class Router
                             $this->ctrlShoppingcart->delete();
                         }
                         elseif($_GET['action'] == 'pay'){
-                            if (isset($_GET['id'])) {
+                            if (isset($_GET['id']) && $_GET["id"] != "") {
                                 if ($_GET['id'] == 'selectaddress'){
                                     $this->ctrlShoppingcart->select_address();
                                 }
-                                if ($_GET["id"] == "choiceaddress") {
+                                elseif ($_GET["id"] == "choiceaddress") {
                                     $this->ctrlShoppingcart->save_address();
+                                }
+                                elseif ($_GET["id"] == "paymentchoice") {
+                                    $this->ctrlShoppingcart->payment_choice();
+                                }
+                                elseif ($_GET["id"] == "paypal" || $_GET["id"] == "check") {
+                                    $this->ctrlShoppingcart->paypage();
+                                }
+                                elseif ($_GET["id"] == "paid"){
+                                    $this->ctrlShoppingcart->paid();
                                 }
                             }
                         }

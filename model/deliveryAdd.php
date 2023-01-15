@@ -111,6 +111,12 @@ class DeliveryAdd extends Model{
         return $ret;
     }
 
+    public function delete()
+    {
+        $query = "DELETE FROM delivery_addresses WHERE id = '".$this->id."'";
+        self::execute($query);
+    }
+
     public static function select_delivery_address_by_id($id)
     {
         $query = "SELECT * FROM delivery_addresses WHERE id = '".$id."'";
