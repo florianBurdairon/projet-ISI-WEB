@@ -178,6 +178,12 @@ class Order extends Model {
         {
             $total = $total + $item->get_product()->get_price() * $item->get_quantity();
         }
+        if ($total != $this->total)
+        {
+            $this->total = $total;
+            $query = "UPDATE orders SET total = '".$this->total."' WHERE id = '".$this->id."'";
+            self::execute($query);
+        }
 
         return $total;
     }
@@ -187,18 +193,6 @@ class Order extends Model {
         $this->customer = $customer;
         $this->customer_id = $customer->get_id();
         $this->registered = 1;
-
-        /*
-        self::change_address(new DeliveryAdd(array(
-            "firstname" => $customer->get_forname(),
-            "lastname" => $customer->get_surname(),
-            "add1" => $customer->get_add1(),
-            "add2" => $customer->get_add2(),
-            "city" => $customer->get_add3(),
-            "postcode" => $customer->get_postcode(),
-            "phone" => $customer->get_phone(),
-            "email" => $customer->get_email())));
-            */
         
         $query = "UPDATE orders SET customer_id = '".$this->customer_id."', registered = '1' WHERE id = '".$this->id."'";
         self::execute($query);
@@ -206,9 +200,20 @@ class Order extends Model {
     
     public function change_address($del_add)
     {
+        if (isset($this->delivery_add))
+        {
+            $this->delivery_add->delete();
+        }
+
         $this->delivery_add = $del_add;
-        $this->delivery_add->insert();
-        $this->delivery_add_id = $this->delivery_add->get_id();
+
+        try {
+            $id = $this->delivery_add->get_id();
+            $this->delivery_add_id = $id;
+        }catch (Exception $e) {
+            $this->delivery_add->insert();
+            $this->delivery_add_id = $this->delivery_add->get_id();
+        }
 
         $this->status = '1';
 
@@ -262,7 +267,7 @@ class Order extends Model {
             $this->items[$ind]->update_in_db();
         }
 
-        $this->calculate_total();
+        self::calculate_total();
     }
 
     public function delete_product($product)
@@ -274,10 +279,25 @@ class Order extends Model {
         }
         else {
             $this->items[$ind]->delete_from_db();
-            unset($this->items[$ind]);
+
+            for ($i = $ind; $i < sizeof($this->items) - 2; $i++)
+            {
+                $this->items[$i] = $this->items[$i+1];
+            }
+            unset($this->items[sizeof($this->items) - 1]);
         }
 
-        $this->calculate_total();
+        self::calculate_total();
+    }
+
+    public function set_payment_type($paymenttype) {
+        $this->payment_type = $paymenttype == "paypal" ? "paypal" : "cheque";
+    }
+
+    public function paid()
+    {
+        $query = "UPDATE orders SET status = '2', payment_type = '".$this->payment_type."', date = '".date("Y-m-d")."' WHERE id = '".$this->id."'";
+        self::execute($query);
     }
 
     public static function check_if_order_for_session($id_session)

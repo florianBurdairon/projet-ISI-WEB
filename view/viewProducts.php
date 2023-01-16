@@ -1,5 +1,5 @@
 <div class="d-sm-inline-flex d-flex" id="wrapper">
-    <div class="border-end bg-white col-lg-2 col-md-3 col-sm-3" id="sidebar-wrapper">
+    <div class="border-right bg-white col-lg-2 col-md-3 col-sm-3" id="sidebar-wrapper">
         <h2>Nos offres</h2>
         <nav>
             <ul>

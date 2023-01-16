@@ -40,15 +40,18 @@ class ShoppingcartController
 
         if (isset($_SESSION["shoppingcart"]))
         {
-            $orderitems = unserialize($_SESSION["shoppingcart"])->get_items();
+            $order = unserialize($_SESSION["shoppingcart"]);
+            $orderitems = $order->get_items();
+            $categories = Category::select_categories();
+
             $view = new View("Shoppingcart", "Panier");
             if (sizeof($orderitems) > 0)
             {
-                $view->generate(array('orderitems' => $orderitems));
+                $view->generate(array('orderitems' => $orderitems, 'total' => $order->get_total(), 'categories' => $categories));
             }
             else
             {
-                $view->generate(array());
+                $view->generate(array('categories' => $categories));
             }
         }
     }
@@ -90,5 +93,106 @@ class ShoppingcartController
         }
         
         header("Location: ".ROOT."shoppingcart");
+    }
+
+    public function select_address()
+    {
+        if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
+            throw new Exception("Impossible to save address of non-existing order.");
+
+        
+        $param = array();
+        if (isset($_SESSION["user"]))
+        {
+            $customer = unserialize($_SESSION["user"]);
+            $customer_address = DeliveryAdd::create_address_from_customer($customer);
+            $param["customeradd"] = $customer_address;
+        }
+        $order = unserialize($_SESSION["shoppingcart"]);
+
+        try {
+            $deladd = $order->get_delivery_add();
+            $param["deliveryadd"] = $deladd;
+        } catch (Exception $e) {}
+        
+        $view = new View("OrderAddress", "Panier");
+        $view->generate($param);
+    }
+
+    public function save_address()
+    {
+        if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
+            throw new Exception("Impossible to save address of non-existing order.");
+
+        $deladd = new DeliveryAdd($_POST);
+        $deladd->insert();
+        $order = unserialize($_SESSION["shoppingcart"]);
+        $order->change_address($deladd);
+        $_SESSION["shoppingcart"] = serialize($order);
+
+        header("Location: ".ROOT."shoppingcart/pay/paymentchoice");
+    }
+
+    public function payment_choice()
+    {
+        if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
+            throw new Exception("Impossible to choose payment for non-existing order.");
+        
+        $order = unserialize($_SESSION["shoppingcart"]);
+
+        try {
+            $add = $order->get_delivery_add_id();
+        } catch (Exception $e){
+            throw new Exception("Impossible to chosse payment without delivery address.");
+        }
+
+        $total = $order->get_total();
+        $number = sizeof($order->get_items());
+
+        $view = new View("PaymentChoice", "Moyen de paiement");
+        $view->generate(array("total" => $total, "number" => $number));
+    }
+
+    public function paypage()
+    {
+        if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
+            throw new Exception("Impossible to pay non-existing order.");
+
+        $order = unserialize($_SESSION["shoppingcart"]);
+
+        $order->set_payment_type($_GET["id"]);
+        $_SESSION["shoppingcart"] = serialize($order);
+
+        $param = array();
+        $param["orderitems"] = $order->get_items();
+        $param["total"] = $order->get_total();
+        $param["paymenttype"] = $_GET["id"] == "paypal" ? "PayPal" : "chèque";
+        $param["guidelines"] = $_GET["id"] == "paypal" ?
+            " - Connectez-vous à votre compte Paypal" :
+            " - Addressez votre chèque à \"Web4Shop\"";
+
+        $view = new View("Payment", "Payer");
+        $view->generate($param);
+    }
+
+    public function paid()
+    {
+        if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
+            throw new Exception("Impossible to pay non-existing order.");
+
+        $order = unserialize($_SESSION["shoppingcart"]);
+
+        try {
+            $payment_type = $order->get_payment_type();
+        } catch (Exception $e) {
+            throw new Exception("Impossible to pay without a payment type.");
+        }
+
+        $order->paid();
+
+        unset($_SESSION["shoppingcart"]);
+
+        $view = new View("Paid", "Merci de votre confiance");
+        $view->generate(array());
     }
 }
