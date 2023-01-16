@@ -14,7 +14,7 @@ class View{
 
     public function generate($data)
     {
-        if($this->action != "Login" || $this->action != "Register" || $this->action != "Error"){
+        if(!($this->action == "Login" || $this->action == "Register" || $this->action == "Error")){
             $uri_param = explode('/', $_SERVER['REQUEST_URI']);
             $newBackToPage = "";
             if(isset($_GET["controller"]) && $_GET["controller"] != ""){

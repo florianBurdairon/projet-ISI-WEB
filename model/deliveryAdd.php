@@ -121,7 +121,7 @@ class DeliveryAdd extends Model{
     {
         $query = "SELECT * FROM delivery_addresses WHERE id = '".$id."'";
         $arr = self::fetchAll($query);
-        $ret = $arr[0];
+        $ret = new DeliveryAdd($arr[0]);
         return $ret;
     }
 
