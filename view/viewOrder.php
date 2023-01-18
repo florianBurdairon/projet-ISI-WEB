@@ -11,9 +11,25 @@
                         <?php 
                             $date = DateTime::createFromFormat('Y-m-d', $order->get_date());
                             echo $date->format('d/m/Y');
+                            $status = "";
+                            switch($order->get_status()){
+                                case 0:
+                                    $status = "panier";
+                                    break;
+                                case 1:
+                                    $status = "en attente du paiement";
+                                    break;
+                                case 2:
+                                case 3:
+                                    $status = "en attente de validation";
+                                    break;
+                                case 10:
+                                    $status = "commande validée";
+                                    break;
+                            }
                         ?>
                     </p>
-                    <p>Status : <?= $order->get_status() ?></p>
+                    <p>Status : <?= $status ?></p>
                     <p>Montant total : <?= number_format($order->get_total(), 2) ?>€</p>
                 </div>
                 <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">

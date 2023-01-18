@@ -37,13 +37,16 @@
                             <p>Date : <?= $date->format('d/m/Y') ?></p>
                             <p>Status : <?= $status ?></p>
                             <p>Montant total : <?= $total ?>€</p>
+                            <?php if($order->get_status() != 10): ?>
+                            <a href="validate/<?= $id ?>">Valider la commande</a>
+                            <?php endif; ?>
                         </div>
                     </a>
                     <?php
                     }
                     catch(Exception $e){}
                 }
-                if($orders==null) echo "Vous n'avez réalisé aucune commande.";
+                if($orders==null) echo "Il n'y a pas encore de commandes.";
             ?>
 
         </div>

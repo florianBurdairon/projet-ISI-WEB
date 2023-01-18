@@ -3,6 +3,7 @@ require_once 'controller/AccountController.php';
 require_once 'controller/HomeController.php';
 require_once 'controller/ProductsController.php';
 require_once 'controller/ShoppingcartController.php';
+require_once 'controller/AdminController.php';
 require_once 'view/view.php';
 
 class Router
@@ -11,6 +12,7 @@ class Router
     private $ctrlAccount;
     private $ctrlProducts;
     private $ctrlShoppingcart;
+    private $ctrlAdmin;
 
     public function __construct()
     {
@@ -18,6 +20,7 @@ class Router
         $this->ctrlProducts = new ProductsController();
         $this->ctrlAccount = new AccountController();
         $this->ctrlShoppingcart = new ShoppingcartController();
+        $this->ctrlAdmin = new AdminController();
     }
 
     // Traite une requête entrante
@@ -118,6 +121,36 @@ class Router
                     else
                         $this->ctrlShoppingcart->select();
                 }
+                elseif ($_GET['controller'] == 'admin') {
+                    if(isset($_GET['action']) && $_GET['action'] != ""){
+                        if($_GET['action'] == 'orders'){
+                            if(isset($_SESSION["user"])){
+                                if(isset($_GET["id"]) && $_GET["id"] != ""){
+                                    $this->ctrlAdmin->select_order_by_id($_GET["id"]);
+                                }
+                                else{
+                                    $this->ctrlAdmin->select_orders();
+                                }
+                            }
+                            else throw new Exception("Aucun utilisateur connecté");
+                        }
+                        elseif($_GET['action'] == 'validate'){
+                            if(isset($_SESSION["user"])){
+                                if(isset($_GET["id"]) && $_GET["id"] != ""){
+                                    $this->ctrlAdmin->validate($_GET["id"]);
+                                }
+                                else{
+                                    $this->ctrlAdmin->select_orders();
+                                }
+                            }
+                            else throw new Exception("Aucun utilisateur connecté");
+                        }
+                        else throw new Exception("Action non valide");
+                    }
+                    else{
+                        $this->ctrlProducts->select();
+                    }
+                } 
                 else throw new Exception("Action non valide");
             } else {
                 // aucune action définie : affichage de l'accueil
