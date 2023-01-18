@@ -1,35 +1,27 @@
-<div class="d-sm-inline-flex d-flex" id="wrapper">
-    <div><!-- class="col-lg-8 col-md-7 col-sm-6 col-xs-5" id="page-content-wrapper">-->
-        <div class="container-fluid">
-            <h1 class="mt-4">Mon compte</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nom</td>
-                        <th>Prénom</th>
-                        <th>Nom d'utilisateur</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Adresse</th>
-                        <th>Complément d'adresse</th>
-                        <th>Ville</th>
-                        <th>Code postal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><?=(($user != null) ? $user->get_surname() : "");?></td>
-                        <td><?=(($user != null) ? $user->get_forname() : "");?></td>
-                        <td><?=(($user != null) ? $login->get_username() : "");?></td>
-                        <td><?=(($user != null) ? $user->get_email() : "");?></td>
-                        <td><?=(($user != null) ? $user->get_phone() : "");?></td>
-                        <td><?=(($user != null) ? $user->get_add1() : "");?></td>
-                        <td><?=(($user != null) ? $user->get_add2() : "");?></td>
-                        <td><?=(($user != null) ? $user->get_add3() : "");?></td>
-                        <td><?=(($user != null) ? $user->get_postcode() : "");?></td>
-                    </tr>
-                </tbody>
-            </table>
+<div class="d-sm-inline-flex d-flex w-100">
+    <div class="container-fluid">
+        <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-user"></i> Mon compte</h1>
+
+        <div class="d-flex flex-column align-items-center">
+            <p class="account-category border-top border-right border-left rounded-top col-4 pt-1"><b>Nom :</b></p>
+            <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $user->get_surname() : "");?></p>
+            <p class="account-category border-top border-right border-left col-4 pt-1"><b>Prénom :</b></p>
+            <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $user->get_forname() : "");?></p>
+            <p class="account-category border-top border-right border-left col-4 pt-1"><b>Nom d'utilisateur :</b></p>
+            <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $login->get_username() : "");?></p>
+            <p class="account-category border-top border-right border-left col-4 pt-1"><b>Email :</b></p>
+            <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $user->get_email() : "");?></p>
+            <p class="account-category border-top border-right border-left col-4 pt-1"><b>Téléphone :</b></p>
+            <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $user->get_phone() : "");?></p>
+            <p class="account-category border-top border-right border-left col-4 pt-1"><b>Adresse :</b></p>
+            <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $user->get_add1() : "");?></p>
+            <p class="account-category border-top border-right border-left col-4 pt-1"><b>Complément d'adresse :</b></p>
+            <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $user->get_add2() : "");?></p>
+            <p class="account-category border-top border-right border-left col-4 pt-1"><b>Ville :</b></p>
+            <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $user->get_add3() : "");?></p>
+            <p class="account-category border-top border-right border-left col-4 pt-1"><b>Code postal :</b></p>
+            <p class="account-info border-bottom border-right border-left rounded-bottom col-4 pb-1"><?=(($user != null) ? $user->get_postcode() : "");?></p>
         </div>
+
     </div>
 </div>

@@ -42,6 +42,7 @@ class ShoppingcartController
         if (isset($_SESSION["shoppingcart"]))
         {
             $order = unserialize($_SESSION["shoppingcart"]);
+
             $orderitems = $order->get_items();
             $categories = Category::select_categories();
 

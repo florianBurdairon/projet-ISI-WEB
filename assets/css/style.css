@@ -45,6 +45,23 @@ table, th, td{
     flex: 50%;
 }
 
+.price-shadow {
+    box-shadow: #BBBBBB 2px 2px 2px;
+}
+
 .product-img {
     border-radius: 20px;
+}
+
+.account-category {
+    font-size: large;
+    padding: 0px 10px;
+    margin: 0px 30px;
+}
+
+.account-info {
+    font-size: large;
+    padding: 0px 30px;
+    margin: 0px 30px;
+    color:#616161;
 }
