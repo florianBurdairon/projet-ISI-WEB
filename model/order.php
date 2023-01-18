@@ -228,6 +228,13 @@ class Order extends Model {
 
         $query = "UPDATE orders SET status = '".$this->status."' WHERE id = '".$this->id."'";
         self::execute($query);
+
+        $query = "SELECT * FROM orders WHERE id = '".$this->id."'";
+        $arr = self::fetchAll($query);
+        if(isset($arr[0]) && $arr[0]["status"] == $this->status){
+            return true;
+        }
+        else return false;
     }
 
     public function insert()
