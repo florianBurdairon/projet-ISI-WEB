@@ -18,7 +18,7 @@
                 </button>
 
                 <!-- Logo -->
-                <a class="navbar-brand" href="<?= ROOT ?>home"><img class="img-thumbnail" src="<?= ROOT ?>assets/productimages/Web4ShopHeader.png"></a>
+                <a class="navbar-brand" href="<?= ROOT ?>home"><img class="img-logo" src="<?= ROOT ?>assets/productimages/Web4ShopNoBackground.png"></a>
 
                 <!-- Liens -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
