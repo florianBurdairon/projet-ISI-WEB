@@ -22,18 +22,18 @@
                             <img class="rounded-circle w-100" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
                         </div>
                         <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
-                            <h3><?php echo $name ?></h3>
-                            <p class="text-md-left text-sm-center"><?php echo $desc ?></p>
-                            <p>Prix : <?php echo $price ?>€</p>
-                            <p>Quantité : <?php echo $quantity ?></p>
-                            <p>Prix total de l'article : <?php echo $quantity * $price ?>€</p>
+                            <h3><?= $name ?></h3>
+                            <p class="text-md-left text-sm-center"><?= $desc ?></p>
+                            <p>Prix : <?= $price ?>€</p>
+                            <p>Quantité : <?= $quantity ?></p>
+                            <p>Prix total de l'article : <?= number_format($quantity * $price, 2) ?>€</p>
                         </div>
                     </div>
                     <?php
                 }
                 ?>
 
-                <p> Prix total de la commande : <?= $total ?></p>
+                <p> Prix total de la commande : <?= number_format($total, 2) ?></p>
                 <p> Vous avez choisi de payer par <?= $paymenttype ?>.</p>
                 <p> Pour cela, veuillez suivre ces consignes :</p>
                 <p><?= $guidelines ?></p>

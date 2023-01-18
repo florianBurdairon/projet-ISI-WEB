@@ -41,14 +41,14 @@
                                 <img class="rounded-circle w-100" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
                             </div>
                             <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
-                                <h3><?php echo $name ?></h3>
-                                <p class="text-md-left text-sm-center"><?php echo $desc ?></p>
-                                <p>Prix : <?php echo $price ?>€</p>
-                                <p>Quantité : <?php echo $quantity ?></p>
-                                <p>Prix total : <?php echo $quantity * $price ?>€</p>
+                                <h3><?= $name ?></h3>
+                                <p class="text-md-left text-sm-center"><?= $desc ?></p>
+                                <p>Prix : <?= number_format($price, 2) ?>€</p>
+                                <p>Quantité : <?= $quantity ?></p>
+                                <p>Prix total : <?= number_format($quantity * $price, 2) ?>€</p>
 
                                 <form class="d-flex flex-column align-items-center" method="post" action="<?= ROOT ?>shoppingcart/delete">
-                                    <input type="hidden" name="product_id" value="<?php echo $id ?>">
+                                    <input type="hidden" name="product_id" value="<?= $id ?>">
                                     <button type="submit">Retirer du panier</button>
                                 </form>
                             </div>
@@ -58,7 +58,7 @@
                         <?php
                     }
 
-                    echo "<p> Prix total de la commande : ".$total."</p>";
+                    echo "<p> Prix total de la commande : ".number_format($total, 2)."€</p>";
                     echo "<a href=\"".ROOT."shoppingcart/pay/selectaddress\"> Payer </a>";
                 }
                 else
