@@ -323,7 +323,11 @@ class Order extends Model {
         $pdf->SetFont('Arial','',12);
         $pdf->Cell(0, 20, $this->delivery_add->get_forname()." ".$this->delivery_add->get_surname(), 0, 0, "R");
         $pdf->Ln(7);
-        $pdf->Cell(0, 20, $this->delivery_add->get_add1()." ".$this->delivery_add->get_add2(), 0, 0, "R");
+        $pdf->Cell(0, 20, $this->delivery_add->get_add1(), 0, 0, "R");
+        if ($this->delivery_add->get_add2() != null && $this->delivery_add->get_add2() != "") {
+            $pdf->Ln(7);
+            $pdf->Cell(0, 20, $this->delivery_add->get_add2(), 0, 0, "R");
+        }
         $pdf->Ln(7);
         $pdf->Cell(0, 20, $this->delivery_add->get_postcode()." ".$this->delivery_add->get_city(), 0, 0, "R");
         $pdf->Ln(7);

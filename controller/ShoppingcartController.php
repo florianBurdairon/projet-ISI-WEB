@@ -204,6 +204,6 @@ class ShoppingcartController
     {
         $order = Order::select_order_by_id($id);
         $pdf = $order->generate_pdf();
-        $pdf->Output();
+        $pdf->Output("I", "facture_".$order->get_id());
     }
 }
