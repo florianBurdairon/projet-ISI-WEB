@@ -21,12 +21,12 @@ class Product extends Model{
         if (isset($data["id"]))
             $this->id = $data["id"];
         else
-            throw new Exception("No ID set");
+            throw new Exception("Aucun identifiant défini");
         
         if (isset($data["name"]))
             $this->name = $data["name"];
         else
-            throw new Exception("No name set");
+            throw new Exception("Aucun nom de produit saisi");
         
         if (isset($data["cat_id"]))
         {
@@ -39,27 +39,27 @@ class Product extends Model{
             $this->cat_id = $this->cat->get_id();
         }
         else
-            throw new Exception("No category set for product ".$this->name.".");
+            throw new Exception("Aucune catégorie associée au produit ".$this->name.".");
 
         if (isset($data["description"]))
             $this->description = $data["description"];
         else
-            throw new Exception("No description set for product ".$this->name.".");
+            throw new Exception("Aucune description saisie pour le produit ".$this->name.".");
 
         if (isset($data["image"]))
             $this->image = $data["image"];
         else
-            throw new Exception("No image set for product ".$this->name.".");
+            throw new Exception("Aucune image associée au produit ".$this->name.".");
 
         if (isset($data["price"]))
             $this->price = $data["price"];
         else
-            throw new Exception("No price set for product ".$this->name.".");
+            throw new Exception("Aucun prix saisi pour le produit ".$this->name.".");
         
         if (isset($data["quantity"]))
             $this->quantity = $data["quantity"];
         else
-            throw new Exception("No quantity set for product ".$this->name.".");
+            throw new Exception("Aucune quantité saisie pour le produit ".$this->name.".");
     }
 
     public function get_id()
@@ -67,7 +67,7 @@ class Product extends Model{
         if (isset($this->id))
             return $this->id;
         else
-            throw new Exception("No ID for product ".$this->name.". You need to insert it in the database first");
+            throw new Exception("Aucun identifiant défini pour le produit ".$this->name);
     }
 
     public function get_cat_id()

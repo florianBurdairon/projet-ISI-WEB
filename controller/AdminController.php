@@ -30,7 +30,8 @@ class AdminController
 
     public function validate($id){
         $order = Order::select_order_by_id($id);
-        $order->change_status("10");
-        header("Location: ".ROOT.BACKTOPAGE);
+        $res = $order->change_status("10");
+        if($res) header("Location: ".ROOT.BACKTOPAGE);
+        else throw new Exception("Numéro de commande invalide");
     }
 }

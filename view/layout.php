@@ -25,19 +25,24 @@
                     <!-- Navigation sur le site -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link <?php if($action == "Home") echo "active" ?>" href="<?= ROOT ?>home"><i class="fa fa-home"></i> Accueil</a></li>
+                        <?php if(!isset($_SESSION["admin"])): ?>
                         <li class="nav-item"><a class="nav-link <?php if($action == "Products") echo "active" ?>" href="<?= ROOT ?>products"><i class="fa fa-shop"></i> Produits</a></li>
+                        <?php endif; ?>
                     </ul>
 
                     <div class="dropdown-divider"></div>
 
                     <!-- Navigation sur les informations de session -->
                     <ul class="navbar-nav">
+                        <?php if(!isset($_SESSION["admin"])): ?>
                         <li class="nav-item"><a class="nav-link <?php if($action == "Shoppingcart") echo "active" ?>" href="<?= ROOT ?>shoppingcart"><i class="fa fa-cart-shopping"></i> Panier</a></li>
+                        <?php endif; ?>
                         <!--<li class="nav-item"><a class="nav-link" href="account.php">Mon compte</a></li>-->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php 
                                 if($user != null) echo "<i class=\"fa fa-user\"></i> Bonjour ".$user->get_surname();
+                                elseif(isset($_SESSION["admin"])) echo "<i class=\"fa fa-user\"></i> Bonjour ".unserialize($_SESSION["admin"])->get_username();
                                 else echo "<i class=\"fa fa-user-plus\"></i> Connexion/Inscription";
                             ?>
                             </a>
@@ -48,7 +53,7 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="<?= ROOT ?>account/logout">Se déconnecter</a>
                                 <?php elseif(isset($_SESSION["admin"])):?>
-                                    <a class="dropdown-item" href="<?= ROOT ?>admin">Accéder aux commandes</a>
+                                    <a class="dropdown-item" href="<?= ROOT ?>admin/orders">Accéder aux commandes</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="<?= ROOT ?>admin/logout">Se déconnecter</a>
                                 <?php else : ?>

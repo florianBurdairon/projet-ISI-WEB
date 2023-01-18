@@ -26,14 +26,14 @@ class Customer extends Model{
         else if (isset($data["firstname"]) && $data["firstname"] != "")
             $this->forname = $data["firstname"];
         else
-            throw new Exception("No forname/firstname set");
+            throw new Exception("Aucun prénom saisi");
 
         if (isset($data["surname"]) && $data["surname"] != "")
             $this->surname = $data["surname"];
         else if (isset($data["lastname"]) && $data["lastname"] != "")
             $this->surname = $data["lastname"];
         else
-            throw new Exception("No surname/lastname set for forname ".$this->forname);
+            throw new Exception("Aucun nom saisi");
 
         if (isset($data["add1"]))
             $this->add1 = $data["add1"];
@@ -56,12 +56,12 @@ class Customer extends Model{
         if (isset($data["phone"]) && $data["phone"] != "")
             $this->phone = $data["phone"];
         else
-            throw new Exception("No phone set for forname ".$this->forname);
+            throw new Exception("Aucun numéro de téléphone saisi");
 
         if (isset($data["email"]) && $data["email"] != "")
             $this->email = $data["email"];
         else
-            throw new Exception("No email set for forname ".$this->forname);
+            throw new Exception("Aucune adresse email saisi");
 
         if (isset($data["registered"]) && $data["registered"] != "")
             $this->registered = $data["registered"];
@@ -74,7 +74,7 @@ class Customer extends Model{
         if (isset($this->id))
             return $this->id;
         else
-            throw new Exception("No ID for Customer ".$this->forname.". You need to insert it in the database first");
+            throw new Exception("Aucun identifiant pour  ".$this->forname." ".$this->surname);
     }
 
     public function get_forname()
@@ -145,17 +145,4 @@ class Customer extends Model{
 
         return sizeof($arr)>0;
     }
-
-    /*
-    public static function insert_customer($newCustomer){
-        $query = "INSERT INTO customers (forname, surname, add1, add2, add3, postcode, phone, email, registered) 
-                    VALUES ('".$newCustomer["forname"]."', '".$newCustomer["surname"]."', 'ligne add1', 'ligne add2', '".$newCustomer["city"]."', '".$newCustomer["postcode"]."', '".$newCustomer["phone"]."', '".$newCustomer["email"]."', 1)";
-        $ret = self::execute($query);
-        
-        // If count == 0 : Error
-        $count = 0;
-        if($ret)
-            $count = $ret->rowCount();
-        return $count;
-    }*/
 }

@@ -96,7 +96,7 @@ class Order extends Model {
         if (isset($this->id))
             return $this->id;
         else
-            throw new Exception("No ID set for this order. You need to insert it in the database first");
+            throw new Exception("Aucun identifiant pour cette commande");
     }
 
     public function get_customer_id()
@@ -104,7 +104,7 @@ class Order extends Model {
         if (isset($this->customer_id))
             return $this->customer_id;
         else
-            throw new Exception("No customer set for this order.");
+            throw new Exception("Aucun identifiant client saisi pour cette commande");
     }
     
     public function get_customer()
@@ -112,7 +112,7 @@ class Order extends Model {
         if (isset($this->customer))
             return $this->customer;
         else
-            throw new Exception("No customer set for this order.");
+            throw new Exception("Aucun client associé à cette commande");
     }
     
     public function get_registered()
@@ -125,7 +125,7 @@ class Order extends Model {
         if (isset($this->delivery_add_id))
             return $this->delivery_add_id;
         else
-            throw new Exception("No delivery address set for this order.");
+            throw new Exception("Aucune adresse de livraison associée à cette commande");
     }
     
     public function get_delivery_add()
@@ -133,7 +133,7 @@ class Order extends Model {
         if (isset($this->delivery_add))
             return $this->delivery_add;
         else
-            throw new Exception("No delivery address set for this order.");
+            throw new Exception("Aucune adresse de livraison associée à cette commande");
     }
     
     public function get_payment_type()
@@ -141,7 +141,7 @@ class Order extends Model {
         if (isset($this->payment_type))
             return $this->payment_type;
         else
-            throw new Exception("No payment type set for this order.");
+            throw new Exception("Aucun mode de paiement associé à cette commande");
     }
     
     public function get_date()
@@ -228,6 +228,13 @@ class Order extends Model {
 
         $query = "UPDATE orders SET status = '".$this->status."' WHERE id = '".$this->id."'";
         self::execute($query);
+
+        $query = "SELECT * FROM orders WHERE id = '".$this->id."'";
+        $arr = self::fetchAll($query);
+        if(isset($arr[0]) && $arr[0]["status"] == $this->status){
+            return true;
+        }
+        else return false;
     }
 
     public function insert()
@@ -284,7 +291,7 @@ class Order extends Model {
         $ind = $this->get_index_if_product_in_order($product);
 
         if ($ind == -1){
-            throw new Exception("Can not delete a product that is not in the shopping cart");
+            throw new Exception("Impossible de supprimer un produit qui n'est pas dans le panier");
         }
         else {
             $this->items[$ind]->delete_from_db();
