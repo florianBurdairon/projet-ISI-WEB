@@ -21,7 +21,7 @@ class AccountController
                 unset($_SESSION["error"]["login"]);
                 unset($_SESSION["autofill"]["login"]);
                 unset($_SESSION["shoppingcart"]);
-                header("Location: ".ROOT.BACKTOPAGE);
+                header("Location: ".ROOT."home");
             }
             else{
                 $db_login = Login::select_login_by_username($_POST["username"]);

@@ -35,7 +35,7 @@ class Router
                 if ($_GET['controller'] == 'home') {
                     $this->ctrlHome->index();
                 } 
-                elseif ($_GET['controller'] == 'products') {
+                elseif ($_GET['controller'] == 'products' && !isset($_SESSION["admin"])) {
                     if(isset($_GET['action']) && $_GET['action'] != ""){
                         if($_GET['action'] == 'cat'){
                             $cat_id = null;
@@ -108,7 +108,7 @@ class Router
                     }
                     else throw new Exception("Action non valide");
                 } 
-                elseif ($_GET['controller'] == 'shoppingcart') {
+                elseif ($_GET['controller'] == 'shoppingcart' && !isset($_SESSION["admin"])) {
                     if (isset($_GET['action']) && $_GET['action'] != "")
                     {
                         if ($_GET['action'] == 'insert'){
