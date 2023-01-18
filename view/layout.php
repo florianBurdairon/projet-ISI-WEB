@@ -65,7 +65,7 @@
 
         <?= $content ?>
 
-        <footer class="fixed-bottom text-light bg-secondary d-flex justify-content-center">
+        <footer class="footer mt-auto text-light bg-secondary d-flex justify-content-center">
             <p>Ce site a été développé par BERNARD Alban et BURDAIRON Florian</p>
             <p></p>
         </footer>

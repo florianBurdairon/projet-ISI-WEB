@@ -117,6 +117,30 @@ class Router
                         elseif($_GET['action'] == 'delete'){
                             $this->ctrlShoppingcart->delete();
                         }
+                        elseif($_GET['action'] == 'pay'){
+                            if (isset($_GET['id']) && $_GET["id"] != "") {
+                                if ($_GET['id'] == 'selectaddress'){
+                                    $this->ctrlShoppingcart->select_address();
+                                }
+                                elseif ($_GET["id"] == "choiceaddress") {
+                                    $this->ctrlShoppingcart->save_address();
+                                }
+                                elseif ($_GET["id"] == "paymentchoice") {
+                                    $this->ctrlShoppingcart->payment_choice();
+                                }
+                                elseif ($_GET["id"] == "paypal" || $_GET["id"] == "check") {
+                                    $this->ctrlShoppingcart->paypage();
+                                }
+                                elseif ($_GET["id"] == "paid"){
+                                    $this->ctrlShoppingcart->paid();
+                                }
+                            }
+                        }
+                        elseif($_GET["action"] == 'generatepdf'){
+                            if (isset($_GET["id"]) && $_GET["id"] != ""){
+                                $this->ctrlShoppingcart->generate_pdf($_GET["id"]);
+                            }
+                        }
                     }
                     else
                         $this->ctrlShoppingcart->select();

@@ -4,6 +4,7 @@ require_once 'model/login.php';
 require_once 'model/order.php';
 require_once 'model/orderItem.php';
 require_once 'view/view.php';
+require_once "fpdf/fpdf.php";
 
 class AccountController
 {
@@ -224,6 +225,13 @@ class AccountController
     public function select_order_by_id($id){
         $order = Order::select_order_by_id_customer_id($id, unserialize($_SESSION["user"])->get_id());
         $orderitems = OrderItem::select_items_by_order($order->get_id());
+
+        if (isset($_POST["id"]))
+        {
+            $pdf = $order->generate_pdf();
+            $pdf->Output();
+        }
+
         $view = new View("Order", "Détails de la commande");
         $view->generate(array("order" => $order, "orderitems" => $orderitems));
     }

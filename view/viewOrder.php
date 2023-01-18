@@ -31,6 +31,10 @@
                     </p>
                     <p>Status : <?= $status ?></p>
                     <p>Montant total : <?= number_format($order->get_total(), 2) ?>€</p>
+
+                    <?php if($order->get_status() > 1){?>
+                        <a href="<?= ROOT."shoppingcart/generatepdf/".$order->get_id() ?>" target="_blank">Générer la commande sous forme d'un pdf</a>
+                    <?php } ?>
                 </div>
                 <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
                     <h3>Adresse de livraison</h3>

@@ -4,6 +4,7 @@ require_once "model/model.php";
 require_once "model/customer.php";
 require_once "model/deliveryAdd.php";
 require_once "model/orderItem.php";
+require_once "fpdf/fpdf.php";
 
 class Order extends Model {
     private $id;
@@ -178,6 +179,12 @@ class Order extends Model {
         {
             $total = $total + $item->get_product()->get_price() * $item->get_quantity();
         }
+        if ($total != $this->total)
+        {
+            $this->total = $total;
+            $query = "UPDATE orders SET total = '".$this->total."' WHERE id = '".$this->id."'";
+            self::execute($query);
+        }
 
         return $total;
     }
@@ -187,18 +194,6 @@ class Order extends Model {
         $this->customer = $customer;
         $this->customer_id = $customer->get_id();
         $this->registered = 1;
-
-        /*
-        self::change_address(new DeliveryAdd(array(
-            "firstname" => $customer->get_forname(),
-            "lastname" => $customer->get_surname(),
-            "add1" => $customer->get_add1(),
-            "add2" => $customer->get_add2(),
-            "city" => $customer->get_add3(),
-            "postcode" => $customer->get_postcode(),
-            "phone" => $customer->get_phone(),
-            "email" => $customer->get_email())));
-            */
         
         $query = "UPDATE orders SET customer_id = '".$this->customer_id."', registered = '1' WHERE id = '".$this->id."'";
         self::execute($query);
@@ -206,9 +201,20 @@ class Order extends Model {
     
     public function change_address($del_add)
     {
+        if (isset($this->delivery_add))
+        {
+            $this->delivery_add->delete();
+        }
+
         $this->delivery_add = $del_add;
-        $this->delivery_add->insert();
-        $this->delivery_add_id = $this->delivery_add->get_id();
+
+        try {
+            $id = $this->delivery_add->get_id();
+            $this->delivery_add_id = $id;
+        }catch (Exception $e) {
+            $this->delivery_add->insert();
+            $this->delivery_add_id = $this->delivery_add->get_id();
+        }
 
         $this->status = '1';
 
@@ -270,7 +276,7 @@ class Order extends Model {
             $this->items[$ind]->update_in_db();
         }
 
-        $this->calculate_total();
+        self::calculate_total();
     }
 
     public function delete_product($product)
@@ -282,10 +288,111 @@ class Order extends Model {
         }
         else {
             $this->items[$ind]->delete_from_db();
-            unset($this->items[$ind]);
+
+            for ($i = $ind; $i < sizeof($this->items) - 2; $i++)
+            {
+                $this->items[$i] = $this->items[$i+1];
+            }
+            unset($this->items[sizeof($this->items) - 1]);
         }
 
-        $this->calculate_total();
+        self::calculate_total();
+    }
+
+    public function set_payment_type($paymenttype) {
+        $this->payment_type = $paymenttype == "paypal" ? "paypal" : "cheque";
+    }
+
+    public function paid()
+    {
+        $query = "UPDATE orders SET status = '2', payment_type = '".$this->payment_type."', date = '".date("Y-m-d")."' WHERE id = '".$this->id."'";
+        self::execute($query);
+    }
+
+    public function generate_pdf()
+    {
+        if ($this->status < 2)
+            throw new Exception("Impossible de générer une commande avant qu'elle ne soit terminée.");
+
+        $pdf = new FPDF();
+        $pdf->SetTitle("Facture N°".$this->id, true);
+        $pdf->AddPage();
+        $pdf->SetFont('Arial','B',16);
+        $pdf->SetFillColor(150, 150, 150);
+
+        // Header :
+        $pdf->Image("assets/productimages/Web4ShopHeader.png", 10, 10, 50);
+        $pdf->Cell(50);
+        $pdf->Cell(40, 20, "Web4Shop", 0, 0, "C");
+
+        $pdf->Ln(30);
+
+        // Client informations
+        $pdf->SetFont('Arial','',12);
+        $pdf->Cell(0, 20, $this->delivery_add->get_forname()." ".$this->delivery_add->get_surname(), 0, 0, "R");
+        $pdf->Ln(7);
+        $pdf->Cell(0, 20, $this->delivery_add->get_add1(), 0, 0, "R");
+        if ($this->delivery_add->get_add2() != null && $this->delivery_add->get_add2() != "") {
+            $pdf->Ln(7);
+            $pdf->Cell(0, 20, $this->delivery_add->get_add2(), 0, 0, "R");
+        }
+        $pdf->Ln(7);
+        $pdf->Cell(0, 20, $this->delivery_add->get_postcode()." ".$this->delivery_add->get_city(), 0, 0, "R");
+        $pdf->Ln(7);
+        $pdf->Cell(0, 20, $this->delivery_add->get_email(), 0, 0, "R");
+        $pdf->Ln(7);
+        $pdf->Cell(0, 20, $this->delivery_add->get_phone(), 0, 0, "R");
+        $pdf->Ln(15);
+
+        $pdf->SetFont('Arial','B',16);
+        $pdf->Cell(190,10,utf8_decode('  Facture'), 0, 0, '', true);
+        $pdf->Ln(7);
+        
+        $pdf->SetFont('Arial','',12);
+        $pdf->Cell(0, 20, utf8_decode("Payé le ".(DateTime::createFromFormat('Y-m-d', $this->date)->format('d/m/Y'))), 0, 0, "L");
+        $pdf->Ln(7);
+        $pdf->Cell(0, 20, utf8_decode("Commande N° ").$this->id, 0, 0, "L");
+
+        if (isset($this->customer_id))
+        {
+            $pdf->Ln(7);
+            $pdf->Cell(0, 20, utf8_decode("Client N° ").$this->customer_id, 0, 0, "L");
+        }
+
+        $pdf->Ln(25);
+
+        // Products
+        $items = $this->items;
+        $widths = array(75, 40, 30, 45);
+        $pdf->Cell($widths[0], 7, "Produits", 1, 0, 'C');
+        $pdf->Cell($widths[1], 7, "Prix unitaire", 1, 0, 'C');
+        $pdf->Cell($widths[2], 7, utf8_decode("Quantité"), 1, 0, 'C');
+        $pdf->Cell($widths[3], 7, "Total", 1, 0, 'C');
+        $pdf->Ln();
+
+        foreach($items as $item){
+            $pdf->Cell($widths[0], 7, utf8_decode($item->get_product()->get_name()), 'LR', 0, 'L');
+            $pdf->Cell($widths[1], 7, number_format($item->get_product()->get_price(), 2).chr(128), 'LR', 0, 'R');
+            $pdf->Cell($widths[2], 7, $item->get_quantity(), 'LR', 0, 'R');
+            $pdf->Cell($widths[3], 7, number_format($item->get_product()->get_price() * $item->get_quantity(), 2).chr(128), 'LR', 0, 'R');
+            $pdf->Ln();
+        }
+
+        $pdf->Cell($widths[0] + $widths[1] + $widths[2], 7, "Total : ", 'LBTR', 0);
+        $pdf->Cell($widths[3], 7, number_format($this->total, 2).chr(128), "LTBR", 0, 'R');
+        $pdf->Ln();
+
+        $pdf->Cell(0, 20, "Paiement par ".$this->payment_type.".", 0, 0, "L");
+        $pdf->Ln(14);
+        $pdf->Cell(0, 20, "Nous vous remercions de votre confiance.", 0, 0, "L");
+        $pdf->Ln(7);
+        $pdf->Cell(0, 20, "Cordialement,", 0, 0, "L");
+        $pdf->Ln(14);
+        $pdf->Cell(0, 20, utf8_decode("Toute l'équipe de Web4Shop"), 0, 0, "L");
+
+        //$pdf->Cell(array_sum($widths),0,'','T');
+
+        return $pdf;
     }
 
     public static function check_if_order_for_session($id_session)
