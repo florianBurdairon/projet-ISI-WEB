@@ -338,32 +338,32 @@ class Order extends Model {
         $pdf->SetFont('Arial','',12);
         $pdf->Cell(0, 20, $this->delivery_add->get_forname()." ".$this->delivery_add->get_surname(), 0, 0, "R");
         $pdf->Ln(7);
-        $pdf->Cell(0, 20, $this->delivery_add->get_add1(), 0, 0, "R");
+        $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", $this->delivery_add->get_add1()), 0, 0, "R");
         if ($this->delivery_add->get_add2() != null && $this->delivery_add->get_add2() != "") {
             $pdf->Ln(7);
-            $pdf->Cell(0, 20, $this->delivery_add->get_add2(), 0, 0, "R");
+            $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", $this->delivery_add->get_add2()), 0, 0, "R");
         }
         $pdf->Ln(7);
-        $pdf->Cell(0, 20, $this->delivery_add->get_postcode()." ".$this->delivery_add->get_city(), 0, 0, "R");
+        $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", $this->delivery_add->get_postcode()." ".$this->delivery_add->get_city()), 0, 0, "R");
         $pdf->Ln(7);
-        $pdf->Cell(0, 20, $this->delivery_add->get_email(), 0, 0, "R");
+        $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", $this->delivery_add->get_email()), 0, 0, "R");
         $pdf->Ln(7);
-        $pdf->Cell(0, 20, $this->delivery_add->get_phone(), 0, 0, "R");
+        $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", $this->delivery_add->get_phone()), 0, 0, "R");
         $pdf->Ln(15);
 
         $pdf->SetFont('Arial','B',16);
-        $pdf->Cell(190,10,utf8_decode('  Facture'), 0, 0, '', true);
+        $pdf->Cell(190,10,iconv("UTF-8", "windows-1252", '  Facture'), 0, 0, '', true);
         $pdf->Ln(7);
         
         $pdf->SetFont('Arial','',12);
-        $pdf->Cell(0, 20, utf8_decode("Payé le ".(DateTime::createFromFormat('Y-m-d', $this->date)->format('d/m/Y'))), 0, 0, "L");
+        $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", "Payé le ".(DateTime::createFromFormat('Y-m-d', $this->date)->format('d/m/Y'))), 0, 0, "L");
         $pdf->Ln(7);
-        $pdf->Cell(0, 20, utf8_decode("Commande N° ").$this->id, 0, 0, "L");
+        $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", "Commande N° ").$this->id, 0, 0, "L");
 
         if (isset($this->customer_id))
         {
             $pdf->Ln(7);
-            $pdf->Cell(0, 20, utf8_decode("Client N° ").$this->customer_id, 0, 0, "L");
+            $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", "Client N° ").$this->customer_id, 0, 0, "L");
         }
 
         $pdf->Ln(25);
@@ -373,12 +373,12 @@ class Order extends Model {
         $widths = array(75, 40, 30, 45);
         $pdf->Cell($widths[0], 7, "Produits", 1, 0, 'C');
         $pdf->Cell($widths[1], 7, "Prix unitaire", 1, 0, 'C');
-        $pdf->Cell($widths[2], 7, utf8_decode("Quantité"), 1, 0, 'C');
+        $pdf->Cell($widths[2], 7, iconv("UTF-8", "windows-1252", "Quantité"), 1, 0, 'C');
         $pdf->Cell($widths[3], 7, "Total", 1, 0, 'C');
         $pdf->Ln();
 
         foreach($items as $item){
-            $pdf->Cell($widths[0], 7, utf8_decode($item->get_product()->get_name()), 'LR', 0, 'L');
+            $pdf->Cell($widths[0], 7, iconv("UTF-8", "windows-1252", $item->get_product()->get_name()), 'LR', 0, 'L');
             $pdf->Cell($widths[1], 7, number_format($item->get_product()->get_price(), 2).chr(128), 'LR', 0, 'R');
             $pdf->Cell($widths[2], 7, $item->get_quantity(), 'LR', 0, 'R');
             $pdf->Cell($widths[3], 7, number_format($item->get_product()->get_price() * $item->get_quantity(), 2).chr(128), 'LR', 0, 'R');
@@ -395,7 +395,7 @@ class Order extends Model {
         $pdf->Ln(7);
         $pdf->Cell(0, 20, "Cordialement,", 0, 0, "L");
         $pdf->Ln(14);
-        $pdf->Cell(0, 20, utf8_decode("Toute l'équipe de Web4Shop"), 0, 0, "L");
+        $pdf->Cell(0, 20, iconv("UTF-8", "windows-1252", "Toute l'équipe de Web4Shop"), 0, 0, "L");
 
         //$pdf->Cell(array_sum($widths),0,'','T');
 
