@@ -47,6 +47,10 @@
                                     <a class="dropdown-item" href="<?= ROOT ?>account/orders">Accéder à mes commandes</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="<?= ROOT ?>account/logout">Se déconnecter</a>
+                                <?php elseif(isset($_SESSION["admin"])):?>
+                                    <a class="dropdown-item" href="<?= ROOT ?>admin">Accéder aux commandes</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="<?= ROOT ?>admin/logout">Se déconnecter</a>
                                 <?php else : ?>
                                     <a class="dropdown-item" href="<?= ROOT ?>account/loginpage">Se connecter</a>
                                     <div class="dropdown-divider"></div>

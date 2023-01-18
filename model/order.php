@@ -222,6 +222,14 @@ class Order extends Model {
         self::execute($query);
     }
 
+    public function change_status($status)
+    {
+        $this->status = $status;
+
+        $query = "UPDATE orders SET status = '".$this->status."' WHERE id = '".$this->id."'";
+        self::execute($query);
+    }
+
     public function insert()
     {
         $query = "";
@@ -413,8 +421,11 @@ class Order extends Model {
     {
         $query = "SELECT * FROM orders WHERE id = '".$id."' AND status > 0";
         $arr = self::fetchAll($query);
-        $ret = new Order($arr[0]);
-        return $ret;
+        if(isset($arr[0])){
+            $ret = new Order($arr[0]);
+            return $ret;
+        }
+        else throw new Exception("Cette commande n'existe pas ou n'est pas associée à cet utilisateur.");
     }
 
     public static function select_order_by_id_customer_id($id, $customer_id)
