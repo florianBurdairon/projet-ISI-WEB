@@ -1,6 +1,7 @@
 <?php
 require_once 'model/order.php';
 require_once 'view/view.php';
+require_once 'fpdf/fpdf.php';
 
 class ShoppingcartController
 {
@@ -190,9 +191,19 @@ class ShoppingcartController
 
         $order->paid();
 
+        $param = array();
+        $param["order_id"] = $order->get_id();
+
         unset($_SESSION["shoppingcart"]);
 
         $view = new View("Paid", "Merci de votre confiance");
-        $view->generate(array());
+        $view->generate($param);
+    }
+
+    public function generate_pdf($id)
+    {
+        $order = Order::select_order_by_id($id);
+        $pdf = $order->generate_pdf();
+        $pdf->Output("I", "facture_".$order->get_id());
     }
 }

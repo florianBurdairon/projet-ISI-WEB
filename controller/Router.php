@@ -133,6 +133,11 @@ class Router
                                 }
                             }
                         }
+                        elseif($_GET["action"] == 'generatepdf'){
+                            if (isset($_GET["id"]) && $_GET["id"] != ""){
+                                $this->ctrlShoppingcart->generate_pdf($_GET["id"]);
+                            }
+                        }
                     }
                     else
                         $this->ctrlShoppingcart->select();
