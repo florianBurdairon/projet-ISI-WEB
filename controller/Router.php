@@ -146,9 +146,9 @@ class Router
                         $this->ctrlShoppingcart->select();
                 }
                 elseif ($_GET['controller'] == 'admin') {
-                    if(isset($_GET['action']) && $_GET['action'] != ""){
-                        if($_GET['action'] == 'orders'){
-                            if(isset($_SESSION["user"])){
+                    if(isset($_SESSION["admin"])){
+                        if(isset($_GET['action']) && $_GET['action'] != ""){
+                            if($_GET['action'] == 'orders'){
                                 if(isset($_GET["id"]) && $_GET["id"] != ""){
                                     $this->ctrlAdmin->select_order_by_id($_GET["id"]);
                                 }
@@ -156,24 +156,22 @@ class Router
                                     $this->ctrlAdmin->select_orders();
                                 }
                             }
-                            else throw new Exception("Aucun utilisateur connecté");
-                        }
-                        elseif($_GET['action'] == 'validate'){
-                            if(isset($_SESSION["user"])){
+                            elseif($_GET['action'] == 'validate'){
                                 if(isset($_GET["id"]) && $_GET["id"] != ""){
                                     $this->ctrlAdmin->validate($_GET["id"]);
                                 }
-                                else{
-                                    $this->ctrlAdmin->select_orders();
-                                }
+                                else throw new Exception("Numéro de commande manquant");
                             }
-                            else throw new Exception("Aucun utilisateur connecté");
+                            elseif($_GET['action'] == 'logout'){
+                                $this->ctrlAdmin->logout();
+                            }
+                            else throw new Exception("Action non valide");
                         }
-                        else throw new Exception("Action non valide");
+                        else{
+                            $this->ctrlProducts->select();
+                        }
                     }
-                    else{
-                        $this->ctrlProducts->select();
-                    }
+                    else throw new Exception("Vous n'êtes pas connectés ou vous n'avez pas la permission d'accéder à cette page");
                 } 
                 else throw new Exception("Action non valide");
             } else {

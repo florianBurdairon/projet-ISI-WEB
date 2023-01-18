@@ -32,9 +32,11 @@
                     <p>Status : <?= $status ?></p>
                     <p>Montant total : <?= number_format($order->get_total(), 2) ?>€</p>
 
-                    <?php if($order->get_status() > 1){?>
+                    <?php if($order->get_status() > 1 && !isset($_SESSION["admin"])):?>
                         <a href="<?= ROOT."shoppingcart/generatepdf/".$order->get_id() ?>" target="_blank">Générer la commande sous forme d'un pdf</a>
-                    <?php } ?>
+                    <?php elseif(isset($_SESSION["admin"]) && $order->get_status() != 10):?>
+                        <a href="<?= ROOT."admin/validate/".$order->get_id() ?>" target="_blank">Valider la commande</a>
+                    <?php endif; ?>
                 </div>
                 <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
                     <h3>Adresse de livraison</h3>

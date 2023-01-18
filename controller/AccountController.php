@@ -1,6 +1,7 @@
 <?php
 require_once 'model/customer.php';
 require_once 'model/login.php';
+require_once 'model/admin.php';
 require_once 'model/order.php';
 require_once 'model/orderItem.php';
 require_once 'view/view.php';
@@ -14,45 +15,56 @@ class AccountController
         $_SESSION["error"]["login"] = array();
 
         if(isset($_POST["username"]) && $_POST["username"] != '' && isset($_POST["raw_password"]) && $_POST["raw_password"] != ''){
-            $db_login = Login::select_login_by_username($_POST["username"]);
-            $login = new Login($_POST);
-            if($db_login){
-                if($login->get_password() == $db_login->get_password()){
-                    $_SESSION["user"] = serialize($db_login->get_customer());
-                    unset($_SESSION["error"]["login"]);
-                    unset($_SESSION["autofill"]["login"]);
+            $admin = Admin::check_if_admin($_POST["username"], $_POST["raw_password"]);
+            if($admin){
+                $_SESSION["admin"] = serialize($admin);
+                unset($_SESSION["error"]["login"]);
+                unset($_SESSION["autofill"]["login"]);
+                unset($_SESSION["shoppingcart"]);
+                header("Location: ".ROOT.BACKTOPAGE);
+            }
+            else{
+                $db_login = Login::select_login_by_username($_POST["username"]);
+                $login = new Login($_POST);
+                if($db_login){
+                    if($login->get_password() == $db_login->get_password()){
+                        $_SESSION["user"] = serialize($db_login->get_customer());
+                        unset($_SESSION["error"]["login"]);
+                        unset($_SESSION["autofill"]["login"]);
 
-                    // Update shoppingcart with user infos
-                    if (isset($_SESSION["shoppingcart"]))
-                    {
-                        $old = Order::check_if_order_for_customer($db_login->get_customer());
-                        if ($old)
+                        // Update shoppingcart with user infos
+                        if (isset($_SESSION["shoppingcart"]))
                         {
-                            $_SESSION["shoppingcart"] = serialize($old);
-                        }
-                        else {
-                            $order = unserialize($_SESSION["shoppingcart"]);
-                            $order->set_customer($db_login->get_customer());
+                            $old = Order::check_if_order_for_customer($db_login->get_customer());
+                            if ($old)
+                            {
+                                $_SESSION["shoppingcart"] = serialize($old);
+                            }
+                            else {
+                                $order = unserialize($_SESSION["shoppingcart"]);
+                                $order->set_customer($db_login->get_customer());
 
-                            $_SESSION["shoppingcart"] = serialize($order);
+                                $_SESSION["shoppingcart"] = serialize($order);
+                            }
                         }
+
+                        header("Location: ".ROOT.BACKTOPAGE);
                     }
-
-                    header("Location: ".ROOT.BACKTOPAGE);
+                    else{
+                        $_SESSION["error"]["login"][$error_count] = "wrong_password";
+                        $error_count++;
+                        $_SESSION["autofill"]["login"]["username"] = $_POST["username"];
+                        header("Location: loginpage");
+                    }
                 }
                 else{
-                    $_SESSION["error"]["login"][$error_count] = "wrong_password";
+                    $_SESSION["error"]["login"][$error_count] = "wrong_username";
                     $error_count++;
-                    $_SESSION["autofill"]["login"]["username"] = $_POST["username"];
+                    $_SESSION["autofill"]["register"]["username"] = $_POST["username"];
                     header("Location: loginpage");
                 }
             }
-            else{
-                $_SESSION["error"]["login"][$error_count] = "wrong_username";
-                $error_count++;
-                $_SESSION["autofill"]["register"]["username"] = $_POST["username"];
-                header("Location: loginpage");
-            }
+            
         }
         else{
             if(!isset($_POST["username"]) || $_POST["username"] == ''){
