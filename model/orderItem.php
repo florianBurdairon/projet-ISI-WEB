@@ -25,7 +25,7 @@ class OrderItem extends Model {
         else if (isset($data["order_id"]))
             $this->order_id = $data["order_id"];
         else
-            throw new Exception("No order set");
+            throw new Exception("Aucune commande ou panier associé");
         
         if (isset($data["product"]))
         {
@@ -38,12 +38,12 @@ class OrderItem extends Model {
             $this->product = Product::select_product_by_id($this->product_id);
         }
         else
-            throw new Exception(("No product set"));
+            throw new Exception(("Aucun produit associé"));
 
         if (isset($data["quantity"]))
             $this->quantity = $data["quantity"];
         else
-            throw new Exception("No quantity set");
+            throw new Exception("Aucune quantité saisie");
     }
 
     public function get_id()
@@ -51,7 +51,7 @@ class OrderItem extends Model {
         if (isset($this->id))
             return $this->id;
         else
-            throw new Exception("No ID for Order Item of product ".$this->product->get_name()." in the order ".$this->order_id.". You need to insert it in the database first");
+            throw new Exception("Aucun identifiant associé");
     }
 
     public function get_order_id()

@@ -16,12 +16,12 @@ class Category extends Model {
         if (isset($data["id"]))
             $this->id = $data["id"];
         else
-            throw new Exception("No ID set");
+            throw new Exception("Aucun identifiant de catégorie saisi");
         
         if (isset($data["name"]))
             $this->name = $data["name"];
         else
-            throw new Exception("No name set");
+            throw new Exception("Aucun nom de catégorie saisi");
     }
 
     public function get_id()

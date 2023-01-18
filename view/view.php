@@ -45,7 +45,7 @@ class View{
         }
         else
         {
-            throw new Exception("File ".$file." not found");
+            throw new Exception("Fichier ".$file." non trouvé");
         }
     }
 }

@@ -58,7 +58,7 @@ class DeliveryAdd extends Model{
         if (isset($this->id))
             return $this->id;
         else
-            throw new Exception("No ID for delivery address of ".$this->forname.". You need to insert it in the database first");
+            throw new Exception("Aucun identifiant pour  ".$this->forname." ".$this->surname);
     }
 
     public function get_forname()

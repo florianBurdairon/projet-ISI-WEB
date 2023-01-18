@@ -33,7 +33,7 @@ class Login extends Model{
         if (isset($data["username"]))
             $this->username = $data["username"];
         else
-            throw new Exception("No username for this login");
+            throw new Exception("Aucun nom d'utilisateur saisi");
 
         if (isset($data["password"]))
             $this->password = $data["password"];
@@ -41,7 +41,7 @@ class Login extends Model{
             $this->password = sha1(iconv("UTF-8", "ASCII", $data["raw_password"]));
         }
         else
-            throw new Exception("No password for this login");
+            throw new Exception("Aucun mot de passe saisi");
     }
 
     public function get_id()
@@ -49,7 +49,7 @@ class Login extends Model{
         if (isset($this->id))
             return $this->id;
         else
-            throw new Exception("No ID for login of ".$this->username.". You need to insert it in the database first");
+            throw new Exception("Aucun identifiant pour  ".$this->username);
     }
 
     public function get_customer_id()
@@ -57,7 +57,7 @@ class Login extends Model{
         if (isset($this->customer_id))
             return $this->customer_id;
         else
-            throw new Exception("No Customer ID for login of ".$this->username.". You need to insert it in the database first");
+            throw new Exception("Aucun identifiant client pour  ".$this->username);
     }
 
     public function get_username()
@@ -75,7 +75,7 @@ class Login extends Model{
         if (isset($this->customer))
             return $this->customer;
         else
-            throw new Exception("No Customer for login of ".$this->username.". You need to insert it in the database first");
+            throw new Exception("Aucun client associé à  ".$this->username);
     }
 
     public static function select_login_by_username($username)

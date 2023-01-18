@@ -77,7 +77,7 @@ class ShoppingcartController
     public function delete()
     {
         if (!isset($_SESSION["shoppingcart"]))
-            throw new Exception("Can not delete products from non-existing shopping cart");
+            throw new Exception("Impossible de supprimer un produit qui n'est pas dans le panier");
         
         // Delete the product from $_POST
         if(isset($_POST["product_id"])){
@@ -99,7 +99,7 @@ class ShoppingcartController
     public function select_address()
     {
         if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
-            throw new Exception("Impossible to save address of non-existing order.");
+            throw new Exception("Impossible de choisir une adresse de livraison pour une commande qui n'existe pas");
 
         
         $param = array();
@@ -123,7 +123,7 @@ class ShoppingcartController
     public function save_address()
     {
         if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
-            throw new Exception("Impossible to save address of non-existing order.");
+            throw new Exception("Impossible de sauvegarder une adresse de livraison pour une commande qui n'existe pas");
 
         $deladd = new DeliveryAdd($_POST);
         $deladd->insert();
@@ -137,14 +137,14 @@ class ShoppingcartController
     public function payment_choice()
     {
         if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
-            throw new Exception("Impossible to choose payment for non-existing order.");
+            throw new Exception("Impossible de choisir une méthode de paiement pour une commande qui n'existe pas");
         
         $order = unserialize($_SESSION["shoppingcart"]);
 
         try {
             $add = $order->get_delivery_add_id();
         } catch (Exception $e){
-            throw new Exception("Impossible to chosse payment without delivery address.");
+            throw new Exception("Impossible de choisir une méthode de paiement pour une commande qui n'a pas encore d'adresse de livraison");
         }
 
         $total = $order->get_total();
@@ -157,7 +157,7 @@ class ShoppingcartController
     public function paypage()
     {
         if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
-            throw new Exception("Impossible to pay non-existing order.");
+            throw new Exception("Impossible de payer pour une commande qui n'existe pas");
 
         $order = unserialize($_SESSION["shoppingcart"]);
 
@@ -179,14 +179,14 @@ class ShoppingcartController
     public function paid()
     {
         if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
-            throw new Exception("Impossible to pay non-existing order.");
+            throw new Exception("Impossible de payer pour une commande qui n'existe pas");
 
         $order = unserialize($_SESSION["shoppingcart"]);
 
         try {
             $payment_type = $order->get_payment_type();
         } catch (Exception $e) {
-            throw new Exception("Impossible to pay without a payment type.");
+            throw new Exception("Impossible de payer sans choisir de moyen de paiement");
         }
 
         $order->paid();
