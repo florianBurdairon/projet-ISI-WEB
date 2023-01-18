@@ -1,59 +1,60 @@
-<div class="d-sm-inline-flex d-flex" id="wrapper">
-    <div class="border-right bg-white col-lg-2 col-md-3 col-sm-3" id="sidebar-wrapper">
-        <h2>Nos offres</h2>
+<div class="d-sm-inline-flex d-flex w-100">
+    <div class="border-right bg-white col-lg-2 col-md-3 col-sm-3">
+        <h2 class="mt-2">Nos offres</h2>
         <nav>
-            <ul>
+            <ul class="list-unstyled ml-4">
                 <?php
                 foreach($categories as $cat)
                 {
                     $id = $cat->get_id();
-                    $name = $cat->get_name();
+                    $name = ucfirst("les ".$cat->get_name());
                     $path = ROOT."products/cat/".$id;
-                    echo "<li><a href='$path'>$name</a></li>";
+                    echo "<li class=\"m-1\"><a href='$path' class=\"li-offers\">$name</a></li>";
                 }
                 ?>
             </ul>
         </nav>
     </div>
-    <div><!-- class="col-lg-8 col-md-7 col-sm-6 col-xs-5" id="page-content-wrapper">-->
-        <div class="container-fluid">
-            <h1 class="mt-4">Produits<?php if(isset($category)) echo(" - ".$category->get_name());?></h1>
-            <?php
-            // Itération sur les résultats de la requête SQL -> Produits
-            if(isset($products)){
-                foreach ($products as $product) {
-                    $id = $product->get_id();
-                    $img = $product->get_image();
-                    $name = $product->get_name();
-                    $desc = $product->get_description();
-                    $price =$product->get_price();
-                    ?>
+    <div class="w-100">
+        <div class="container-fluid w-100">
+            <h1 class="mt-4 mb-3 ml-5">Produits<?php if(isset($category)) echo(" - ".$category->get_name());?></h1>
 
-                    <!-- HTML -->
-                    <div class="d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-5">
-                        <div class="border-end bg-white col-5 col-lg-3 col-md-4 col-sm-5 m-2">
-                            <img class="rounded-circle w-100" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
+            <div class="container d-flex flex-wrap justify-content-center">
+                <?php
+                // Itération sur les résultats de la requête SQL -> Produits
+                if(isset($products)){
+                    foreach ($products as $product) {
+                        $id = $product->get_id();
+                        $img = $product->get_image();
+                        $name = $product->get_name();
+                        $desc = $product->get_description();
+                        $price =$product->get_price();
+                        ?>
+
+                        <div class="product-box col-5 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-4 mr-5 pt-3 pb-3">
+                            <div class="d-flex flex-column align-items-center bg-white col-4">
+                                <img class="product-img w-100 mb-2" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
+                                <h3><b><?= $price ?>€</b></h3>
+                            </div>
+                            <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
+                                <h4><b><?= $name ?></b></h4>
+                                <p class="text-md-left text-sm-center"><?= $desc ?></p>
+
+                                <form class="d-flex flex-column align-items-center" method="post" action="<?= ROOT ?>shoppingcart/insert">
+                                    <input type="hidden" name="product_id" value="<?= $id ?>">
+                                    <div class="d-flex justify-content-end align-items-center">
+                                        <input class="col-4" type="number" id="quantity" name="quantity" value="1" min="1">
+                                        <button class="btn ml-4 mr-2" type="submit"><i class="fa fa-cart-plus"></i></button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
-                            <h3><?= $name ?></h3>
-                            <p class="text-md-left text-sm-center"><?= $desc ?></p>
-                            <p>Prix : <?= $price ?>€</p>
 
-                            <form class="d-flex flex-column align-items-center" method="post" action="<?= ROOT ?>shoppingcart/insert">
-                                <input type="hidden" name="product_id" value="<?= $id ?>">
-                                <div>
-                                    <label for="quantity">Quantity :</label>
-                                    <input type="number" id="quantity" name="quantity" value="1" min="1">
-                                </div>
-                                <button type="submit">Ajouter au panier</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <?php
+                        <?php
+                    }
                 }
-            }
-            ?>
+                ?>
+            </div>
         </div>
     </div>
 </div>
