@@ -73,7 +73,7 @@
                 {
                     ?>
                     
-                    <p>Aucun produit dans le panier.</p>
+                    <h4>Aucun produit dans le panier.</h4>
 
                     <?php
                 }

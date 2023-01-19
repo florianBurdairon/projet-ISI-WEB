@@ -1,7 +1,8 @@
-<div class="d-sm-inline-flex d-flex" id="wrapper">
-    <div><!-- class="col-lg-8 col-md-7 col-sm-6 col-xs-5" id="page-content-wrapper">-->
-        <div class="container-fluid">
-            <h1 class="mt-4">Mes commandes</h1>
+<div class="d-sm-inline-flex d-flex w-100">
+    <div class="container-fluid">
+        <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-list"></i> Mes commandes</h1>
+
+        <div class="d-flex flex-wrap justify-content-center w-100">
             <?php
                 foreach($orders as $order)
                 {
@@ -10,19 +11,23 @@
                         $payment_type = $order->get_payment_type();
                         $date = DateTime::createFromFormat('Y-m-d', $order->get_date());
                         $status = "";
+                        $icon = "";
                         switch($order->get_status()){
                             case 0:
                                 $status = "panier";
                                 break;
                             case 1:
                                 $status = "en attente du paiement";
+                                $icon = "fa-dollar-sign";
                                 break;
                             case 2:
                             case 3:
                                 $status = "en attente de validation";
+                                $icon = "fa-pause";
                                 break;
                             case 10:
                                 $status = "commande validée";
+                                $icon = "fa-check";
                                 break;
                         }
                         $total = number_format($order->get_total(), 2);
@@ -30,22 +35,23 @@
 
                     <!-- HTML -->
 
-                    <a href="orders/<?= $id ?>">
-                        <div class="align-items-center border rounded mb-5">
-                            <p>Numéro de commande : <?= $id ?></p>
-                            <p>Type de paiement : <?= $payment_type ?></p>
-                            <p>Date : <?= $date->format('d/m/Y') ?></p>
-                            <p>Status : <?= $status ?></p>
-                            <p>Montant total : <?= $total ?>€</p>
-                        </div>
-                    </a>
+                    <div class="order-box col-3 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
+                        <a href="orders/<?= $id ?>" class="order-link p-2 w-100 d-flex flex-column align-items-center">
+                            <h5 class="mb-3"><b> <i class="fa <?= $icon?> mr-3"></i> Commande N°<?= $id ?></b></h5>
+                            <div>
+                                <p class="mb-2">Paiement par <?= $payment_type ?></p>
+                                <p class="mb-2">Date : <?= $date->format('d/m/Y') ?></p>
+                                <p class="mb-2">Status : <?= $status ?></p>
+                                <p class="mb-0">Montant total : <?= $total ?>€</p>
+                            </div>
+                        </a>
+                    </div>
                     <?php
                     }
                     catch(Exception $e){}
                 }
                 if($orders==null) echo "Vous n'avez réalisé aucune commande.";
             ?>
-
         </div>
     </div>
 </div>

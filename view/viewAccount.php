@@ -20,8 +20,7 @@
             <p class="account-category border-top border-right border-left col-4 pt-1"><b>Ville :</b></p>
             <p class="account-info border-bottom border-right border-left col-4 pb-1"><?=(($user != null) ? $user->get_add3() : "");?></p>
             <p class="account-category border-top border-right border-left col-4 pt-1"><b>Code postal :</b></p>
-            <p class="account-info border-bottom border-right border-left rounded-bottom col-4 pb-1"><?=(($user != null) ? $user->get_postcode() : "");?></p>
+            <p class="account-info border-bottom border-right border-left rounded-bottom col-4 pb-1 mb-4"><?=(($user != null) ? $user->get_postcode() : "");?></p>
         </div>
-
     </div>
 </div>
