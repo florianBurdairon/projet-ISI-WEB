@@ -1,15 +1,15 @@
-<div class="d-sm-inline-flex d-flex w-100">
-    <div class="border-right bg-white col-lg-2 col-md-3 col-sm-3">
+<div class="d-flex d-sm-inline-flex w-100 flex-column flex-md-row">
+    <div class="border-bottom border-right bg-white d-flex flex-column col-lg-2 col-md-3 d-inline-flex">
         <h2 class="mt-2">Nos offres</h2>
         <nav>
-            <ul class="list-unstyled ml-4">
+            <ul class="d-flex flex-row flex-md-column list-unstyled ml-4">
                 <?php
                 foreach($categories as $cat)
                 {
                     $id = $cat->get_id();
                     $name = ucfirst("les ".$cat->get_name());
                     $path = ROOT."products/cat/".$id;
-                    echo "<li class=\"m-1\"><a href='$path' class=\"li-offers\">$name</a></li>";
+                    echo "<li class=\"m-1 mr-4 mr-md-1\"><a href='$path' class=\"li-offers\">$name</a></li>";
                 }
                 ?>
             </ul>
@@ -43,7 +43,7 @@
                         $quantity = $orderitem->get_quantity();
                         ?>
 
-                        <div class="product-box col-5 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center justify-content-between border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
+                        <div class="product-box col-12 col-md-5 d-flex flex-row align-items-center justify-content-between border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
                             <div class="d-flex flex-column align-items-center bg-white col-4">
                                 <img class="product-img w-100 mb-2" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
                             </div>

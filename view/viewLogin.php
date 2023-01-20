@@ -2,7 +2,7 @@
     <div class="container-fluid w-100">
         <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-user"></i> Connexion</h1>
         <div class="d-flex justify-content-center w-100">
-            <form class="register-box p-3 border rounded col-3 d-flex flex-column" method="post" action="login">
+            <form class="register-box p-3 border rounded col-8 col-md-3 d-flex flex-column" method="post" action="login">
                 <label for="username">Nom d'utilisateur</label>
                 <input type="text" name="username" value="<?php if(isset($autofill["username"])) echo $autofill["username"]; ?>">
                 <?php if(isset($errors["missing_username"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir un nom d'utilisateur.</div>";?>
