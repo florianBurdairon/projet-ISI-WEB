@@ -98,3 +98,11 @@ table, th, td{
 .larger-text {
     font-size: large;
 }
+
+.password-info {
+    display: none;
+}
+
+.password:focus + .password-info {
+    display: block;
+}
