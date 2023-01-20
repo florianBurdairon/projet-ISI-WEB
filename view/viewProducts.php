@@ -17,7 +17,7 @@
     </div>
     <div class="w-100">
         <div class="container-fluid w-100">
-            <h1 class="mt-4 mb-3 ml-5">Produits<?php if(isset($category)) echo(" - ".$category->get_name());?></h1>
+            <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-shop"></i> Produits<?php if(isset($category)) echo(" - ".$category->get_name());?></h1>
 
             <div class="container d-flex flex-wrap justify-content-center">
                 <?php
@@ -31,7 +31,7 @@
                         $price =$product->get_price();
                         ?>
 
-                        <div class="product-box col-5 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-4 mr-5 pt-3 pb-3">
+                        <div class="product-box col-5 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
                             <div class="d-flex flex-column align-items-center bg-white col-4">
                                 <img class="product-img w-100 mb-2" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
                                 <h3><b><?= $price ?>€</b></h3>

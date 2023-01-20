@@ -42,6 +42,7 @@ class ShoppingcartController
         if (isset($_SESSION["shoppingcart"]))
         {
             $order = unserialize($_SESSION["shoppingcart"]);
+
             $orderitems = $order->get_items();
             $categories = Category::select_categories();
 
@@ -171,6 +172,7 @@ class ShoppingcartController
         $param["guidelines"] = $_GET["id"] == "paypal" ?
             " - Connectez-vous à votre compte Paypal" :
             " - Addressez votre chèque à \"Web4Shop\"";
+        $param["address"] = $order->get_delivery_add();
 
         $view = new View("Payment", "Payer");
         $view->generate($param);

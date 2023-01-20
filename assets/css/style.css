@@ -45,6 +45,44 @@ table, th, td{
     flex: 50%;
 }
 
+.register-box {
+    box-shadow: #BBBBBB 5px 5px 5px;
+}
+
+.order-box {
+    box-shadow: #BBBBBB 3px 3px 3px;
+}
+
+.order-link {
+    color: #616161;
+}
+
+.order-link:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.price-shadow {
+    box-shadow: #BBBBBB 2px 2px 2px;
+}
+
 .product-img {
     border-radius: 20px;
+}
+
+.account-category {
+    font-size: large;
+    padding: 0px 10px;
+    margin: 0px 30px;
+}
+
+.account-info {
+    font-size: large;
+    padding: 0px 30px;
+    margin: 0px 30px;
+    color:#616161;
+}
+
+.larger-text {
+    font-size: large;
 }

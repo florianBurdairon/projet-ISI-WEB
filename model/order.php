@@ -296,9 +296,10 @@ class Order extends Model {
         else {
             $this->items[$ind]->delete_from_db();
 
-            for ($i = $ind; $i < sizeof($this->items) - 2; $i++)
+            for ($i = $ind; $i < sizeof($this->items) - 1; $i++)
             {
-                $this->items[$i] = $this->items[$i+1];
+                $ii = $i + 1;
+                $this->items[$i] = $this->items[$ii];
             }
             unset($this->items[sizeof($this->items) - 1]);
         }

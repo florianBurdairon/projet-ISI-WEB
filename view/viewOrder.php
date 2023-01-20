@@ -1,86 +1,107 @@
-<div class="d-sm-inline-flex d-flex" id="wrapper">
-    <div><!-- class="col-lg-8 col-md-7 col-sm-6 col-xs-5" id="page-content-wrapper">-->
-        <div class="container-fluid">
-            <h1 class="mt-4">Commande N°<?= $order->get_id() ?></h1>
-            <div class="d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-5">
-                <div class="border-end bg-white col-5 col-lg-3 col-md-4 col-sm-5 m-2">
-                    <h3>Informations sur la commande</h3>
-                    <p>Numéro de commande : <?= $order->get_id() ?></p>
-                    <p>Type de paiement : <?= $order->get_payment_type() ?></p>
-                    <p>Date : 
-                        <?php 
-                            $date = DateTime::createFromFormat('Y-m-d', $order->get_date());
-                            echo $date->format('d/m/Y');
-                            $status = "";
-                            switch($order->get_status()){
-                                case 0:
-                                    $status = "panier";
-                                    break;
-                                case 1:
-                                    $status = "en attente du paiement";
-                                    break;
-                                case 2:
-                                case 3:
-                                    $status = "en attente de validation";
-                                    break;
-                                case 10:
-                                    $status = "commande validée";
-                                    break;
-                            }
-                        ?>
-                    </p>
-                    <p>Status : <?= $status ?></p>
-                    <p>Montant total : <?= number_format($order->get_total(), 2) ?>€</p>
+<div class="d-sm-inline-flex d-flex w-100">
+    <div class="container-fluid w-100">
+        <?php 
+            $date = DateTime::createFromFormat('Y-m-d', $order->get_date())->format('d/m/Y');
+            $status = "";
+            $icon = "";
+            switch($order->get_status()){
+                case 0:
+                    $status = "panier";
+                    break;
+                case 1:
+                    $status = "en attente du paiement";
+                    $icon = "fa-dollar-sign";
+                    break;
+                case 2:
+                case 3:
+                    $status = "en attente de validation";
+                    $icon = "fa-pause";
+                    break;
+                case 10:
+                    $status = "commande validée";
+                    $icon = "fa-check";
+                    break;
+            }
+        ?>
+        <h1 class="mt-4 mb-3 ml-5"><i class="fa <?= $icon ?>"></i> Commande N°<?= $order->get_id() ?></h1>
 
-                    <?php if($order->get_status() > 1 && !isset($_SESSION["admin"])):?>
-                        <a href="<?= ROOT."shoppingcart/generatepdf/".$order->get_id() ?>" target="_blank">Générer la commande sous forme d'un pdf</a>
-                    <?php elseif(isset($_SESSION["admin"]) && $order->get_status() != 10):?>
-                        <a href="<?= ROOT."admin/validate/".$order->get_id() ?>" target="_blank">Valider la commande</a>
-                    <?php endif; ?>
-                </div>
-                <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
-                    <h3>Adresse de livraison</h3>
-                    <?php $address = $order->get_delivery_add(); ?>
-                    <p>Nom : <?= $address->get_surname() ?></p>
-                    <p>Prénom : <?= $address->get_forname() ?></p>
-                    <p>Email : <?= $address->get_email() ?></p>
-                    <p>Téléphone : <?= $address->get_phone() ?></p>
-                    <p>Adresse : <?= $address->get_add1() ?></p>
-                    <p>Complément d'adresse : <?= $address->get_add2() ?></p>
-                    <p>Ville : <?= $address->get_city() ?></p>
-                    <p>Code postal : <?= $address->get_postcode() ?></p>
+
+        <div class="d-flex flex-row align-items-center justify-content-center w-100 mb-0">
+            
+            <div class="order-box col-5 d-flex flex-column align-items-center border rounded mb-0 mr-3 ml-3 pt-3 pb-3 h-100">
+                <div class="p-2 w-100 d-flex flex-column align-items-center">
+                    <h5 class="mb-3"><b><i class="fa fa-circle-info"></i> Informations</b></h5>
+                    <div>
+                        <p class="mb-2">Paiement par <?= $order->get_payment_type() ?></p>
+                        <p class="mb-2">Date : <?= $date ?></p>
+                        <p class="mb-2">Status : <?= $status ?></p>
+                        <p class="mb-0">Montant total : <?= $order->get_total() ?>€</p>
+                    </div>
                 </div>
             </div>
-            <?php
-                foreach($orderitems as $orderitem)
-                {
-                    $product = $orderitem->get_product();
-                    $id = $product->get_id();
-                    $img = $product->get_image();
-                    $name = $product->get_name();
-                    $desc = $product->get_description();
-                    $price = $product->get_price();
-                    $quantity = $orderitem->get_quantity();
-                    ?>
 
-                    <!-- HTML -->
-
-                    <div class="d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-5">
-                        <div class="border-end bg-white col-5 col-lg-3 col-md-4 col-sm-5 m-2">
-                            <img class="rounded-circle w-100" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
-                        </div>
-                        <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
-                            <h3><?= $name ?></h3>
-                            <p class="text-md-left text-sm-center"><?php echo $desc ?></p>
-                            <p>Prix : <?= number_format($price, 2) ?>€</p>
-                            <p>Quantité : <?= $quantity ?></p>
-                            <p>Prix total : <?= number_format($quantity*$price, 2) ?>€</p>
-                        </div>
+            <div class="order-box col-5 d-flex flex-column align-items-center border rounded mb-0 mr-3 ml-3 pt-3 pb-3 h-100">
+                <h5 class="mb-3"><b><i class="fa fa-location-dot"></i> Adresse de livraison</b></h5>
+                <?php $address = $order->get_delivery_add(); ?>
+                <div class="w-100 d-flex flex-row justify-content-around">
+                    <div>
+                        <p class="mb-2">Nom : <?= $address->get_surname() ?></p>
+                        <p class="mb-2">Prénom : <?= $address->get_forname() ?></p>
+                        <p class="mb-2">Email : <?= $address->get_email() ?></p>
+                        <p class="mb-2">Téléphone : <?= $address->get_phone() ?></p>
                     </div>
-                    <?php
-                }
-            ?>
-
+                    <div>
+                        <p class="mb-2">Adresse : <?= $address->get_add1() ?></p>
+                        <p class="mb-2">Complément d'adresse : <?= $address->get_add2() ?></p>
+                        <p class="mb-2">Ville : <?= $address->get_city() ?></p>
+                        <p class="mb-2">Code postal : <?= $address->get_postcode() ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div class="mt-3 d-flex justify-content-center">
+            <?php if($order->get_status() > 1 && !isset($_SESSION["admin"])):?>
+                <a class="btn btn-light" href="<?= ROOT."shoppingcart/generatepdf/".$order->get_id() ?>" target="_blank"><i class="fa fa-download"></i> Télécharger la commande</a>
+            <?php elseif(isset($_SESSION["admin"]) && $order->get_status() != 10):?>
+                <a class="btn" href="<?= ROOT."admin/validate/".$order->get_id() ?>">Valider la commande</a>
+            <?php endif; ?>
+        </div>
+
+        <hr class="hr mb-5 mt-5" />
+            
+        <div class="container d-flex flex-wrap justify-content-center">
+        <?php
+            foreach($orderitems as $orderitem)
+            {
+                $product = $orderitem->get_product();
+                $id = $product->get_id();
+                $img = $product->get_image();
+                $name = $product->get_name();
+                $desc = $product->get_description();
+                $price = $product->get_price();
+                $quantity = $orderitem->get_quantity();
+                ?>
+
+                <div class="product-box col-5 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center justify-content-between border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
+                    <div class="d-flex flex-column align-items-center bg-white col-4">
+                        <img class="product-img w-100 mb-2" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
+                    </div>
+                    <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
+                        <h3><?= $name ?></h3>
+                        <p>Prix unitaire : <?= number_format($price, 2) ?>€</p>
+                        <p><?= $quantity ?> exemplaire<?php if($quantity > 1) echo "s" ?></p>
+                    </div>
+                    <div class="d-flex flex-column align-items-end bd-highlight mb-3 h-100">
+                        <h3 class="mt-2 p-2 bd-highlight"><b><?= number_format($quantity * $price, 2) ?>€</b></h3>
+                    </div>
+                </div>
+
+
+                <?php
+            }
+        ?>
+        </div>
+
     </div>
 </div>
