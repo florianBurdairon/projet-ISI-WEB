@@ -14,7 +14,10 @@ class AccountController
         $error_count = 0;
         $_SESSION["error"]["login"] = array();
 
-        if(isset($_POST["username"]) && $_POST["username"] != '' && isset($_POST["raw_password"]) && $_POST["raw_password"] != ''){
+        $password_pattern = "/^(?=.*\d)(?=.*[+*!&?#|_])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/";
+
+        if(isset($_POST["username"]) && $_POST["username"] != '' && isset($_POST["raw_password"]) && $_POST["raw_password"] != '' && preg_match($password_pattern, $_POST["raw_password"]))
+        {
             $admin = Admin::check_if_admin($_POST["username"], $_POST["raw_password"]);
             if($admin){
                 $_SESSION["admin"] = serialize($admin);
@@ -85,10 +88,15 @@ class AccountController
         $error_count = 0;
         $_SESSION["error"]["register"] = array();
 
+        $password_pattern = "/^(?=.*\d)(?=.*[+*!&?#|_])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/";
+        $phone_pattern = "/^(?:(?:\+|00)33|0)(?:\s*)[1-9](?:[\s.-]*\d{2}){4}$/";
+        $postcode_pattern = "/^$|^[0-9]{5}/";
+
         try{
             $customer = new Customer($_POST);
             $login = null;
-            if(!isset($_POST["username"]) || $_POST["username"] == '' || $_POST["raw_password"] || $_POST["raw_password"] == '' || !isset($_POST["raw_password2"]) || $_POST["raw_password2"] == '' || $_POST["raw_password"] != $_POST["raw_password2"]) new Exception();
+            if(!isset($_POST["username"]) || $_POST["username"] == '' || !isset($_POST["raw_password"]) || $_POST["raw_password"] == '' || !isset($_POST["raw_password2"]) || $_POST["raw_password2"] == '' || $_POST["raw_password"] != $_POST["raw_password2"]) throw new Exception();
+            if(!preg_match($password_pattern, $_POST["raw_password"]) || !preg_match($password_pattern, $_POST["raw_password2"]) || !preg_match($phone_pattern, $_POST["phone"]) || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) || !preg_match($postcode_pattern, $_POST["postcode"])) throw new Exception();
             if(!Customer::check_if_email_already_used($_POST["email"]) && !Login::check_if_username_already_used($_POST["username"])){
                 if($customer->insert()){
                     $login_infos = array("username" => $_POST["username"], "raw_password" => $_POST["raw_password"], "customer_id" => $customer->get_id());
@@ -140,12 +148,24 @@ class AccountController
                 $_SESSION["error"]["register"][$error_count] = "missing_email";
                 $error_count++;
             }
+            if(!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
+                $_SESSION["error"]["register"][$error_count] = "wrong_email";
+                $error_count++;
+            }
             if(!isset($_POST["raw_password"]) || $_POST["raw_password"] == ''){
                 $_SESSION["error"]["register"][$error_count] = "missing_password";
                 $error_count++;
             }
+            if(!preg_match($password_pattern, $_POST["raw_password"])){
+                $_SESSION["error"]["register"][$error_count] = "wrong_password";
+                $error_count++;
+            }
             if((!isset($_POST["raw_password2"]) || $_POST["raw_password2"] == '') && (isset($_POST["raw_password"]) && $_POST["raw_password"] != '')){
                 $_SESSION["error"]["register"][$error_count] = "missing_password2";
+                $error_count++;
+            }
+            if(!preg_match($password_pattern, $_POST["raw_password2"])){
+                $_SESSION["error"]["register"][$error_count] = "wrong_password2";
                 $error_count++;
             }
             if(!isset($_POST["firstname"]) || $_POST["firstname"] == ''){
@@ -164,8 +184,16 @@ class AccountController
                 $_SESSION["error"]["register"][$error_count] = "missing_phone";
                 $error_count++;
             }
+            if(!preg_match($phone_pattern, $_POST["phone"])){
+                $_SESSION["error"]["register"][$error_count] = "wrong_phone";
+                $error_count++;
+            }
             if($_POST["raw_password"] == $_POST["raw_password2"] && (!isset($_POST["password2"]) || $_POST["password2"] == '') && (isset($_POST["password"]) && $_POST["password"] != '')){
                 $_SESSION["error"]["register"][$error_count] = "different_password";
+                $error_count++;
+            }
+            if(!preg_match($postcode_pattern, $_POST["postcode"])){
+                $_SESSION["error"]["register"][$error_count] = "wrong_postcode";
                 $error_count++;
             }
             $_SESSION["autofill"]["register"] = $_POST;

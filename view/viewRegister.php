@@ -20,22 +20,28 @@
                 <?php if(isset($errors["username_already_used"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Nom d'utilisateur déjà utilisé. <a href=\"".ROOT."account/loginpage\">Se connecter</a></div>";?>
 
                 <label class="mt-3" for="email">Adresse mail</label>
-                <input type="email" name="email" value="<?php if(isset($autofill["email"])) echo $autofill["email"]; ?>">
+                <input type="email" name="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" value="<?php if(isset($autofill["email"])) echo $autofill["email"]; ?>">
                 <?php if(isset($errors["missing_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre adresse email.</div>";?>
                 <?php if(isset($errors["email_already_used"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Adresse email déjà utilisée. <a href=\"".ROOT."account/loginpage\">Se connecter</a></div>";?>
+                <?php if(isset($errors["wrong_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Adresse email incorrect.</div>";?>
 
                 <label class="mt-3" for="raw_password">Mot de passe</label>
-                <input type="password" name="raw_password">
+                <input type="password" class="password" name="raw_password" pattern="^(?=.*\d)(?=.*[+*!&?#|_])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$">
+                <small class="password-info">Le mot de passe doit contenir au minimum 8 caractères dont chacun des caractères suivant : minuscule, majuscule, chiffre, caractère spécial (&,!,_,-,[,],\,^,$,.,|,?,*,+,(,))</small>
                 <?php if(isset($errors["missing_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir un mot de passe.</div>";?>
+                <?php if(isset($errors["wrong_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Mot de passe incorrect.</div>";?>
 
                 <label class="mt-3" for="raw_password2">Confirmation mot de passe</label>
-                <input type="password" name="raw_password2">
+                <input type="password" class="password" name="raw_password2" pattern="^(?=.*\d)(?=.*[+*!&?#|_])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$">
+                <small class="password-info">Le mot de passe doit contenir au minimum 8 caractères dont chacun des caractères suivant : minuscule, majuscule, chiffre, caractère spécial (&,!,_,-,[,],\,^,$,.,|,?,*,+,(,))</small>
                 <?php if(isset($errors["missing_password2"]) && !isset($errors["missing_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez re-saisir le mot de passe.</div>";?>
                 <?php if(isset($errors["different_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Mots de passe différents.</div>";?>
+                <?php if(isset($errors["wrong_password2"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Mot de passe incorrect.</div>";?>
 
                 <label class="mt-3" for="phone">Téléphone</label>
-                <input type="number" name="phone" value="<?php if(isset($autofill["phone"])) echo $autofill["phone"]; ?>">
+                <input type="text" name="phone" pattern="^(?:(?:\+|00)33|0)(?:\s*)[1-9](?:[\s.-]*\d{2}){4}$" value="<?php if(isset($autofill["phone"])) echo $autofill["phone"]; ?>">
                 <?php if(isset($errors["missing_phone"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre numéro de téléphone.</div>";?>
+                <?php if(isset($errors["wrong_phone"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Numéro de téléphone incorrect.</div>";?>
 
                 <label class="mt-3" for="add1">Adresse</label>
                 <input type="text" name="add1" value="<?php if(isset($autofill["add1"])) echo $autofill["add1"]; ?>">
@@ -47,7 +53,8 @@
                 <input type="text" name="add3" value="<?php if(isset($autofill["add3"])) echo $autofill["add3"]; ?>">
 
                 <label class="mt-3" for="postcode">Code postal</label>
-                <input type="number" name="postcode" value="<?php if(isset($autofill["postcode"])) echo $autofill["postcode"]; ?>">
+                <input type="number" name="postcode" pattern="^$|^[0-9]{5}$" value="<?php if(isset($autofill["postcode"])) echo $autofill["postcode"]; ?>">
+                <?php if(isset($errors["wrong_postcode"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Code postal incorrect.</div>";?>
 
                 <button class="btn mt-5" type="submit">S'inscrire</button>
             </form>
