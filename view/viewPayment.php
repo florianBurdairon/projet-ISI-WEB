@@ -2,9 +2,9 @@
     <div class="container-fluid w-100">
         <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-dollar"></i> Payer</h1>
 
-        <div class="d-flex flex-row align-items-center justify-content-center w-100 mb-0">
-            
-            <div class="order-box col-5 d-flex flex-column align-items-center border rounded mb-0 mr-3 ml-3 pt-3 pb-3 h-100">
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-center w-100 mb-0">
+                
+            <div class="order-box col-11 col-md-5 d-flex flex-column align-items-center border rounded mb-4 mb-md-0 mr-3 ml-3 pt-3 pb-3 h-100">
                 <div class="p-2 w-100 d-flex flex-column align-items-center">
                     <h5 class="mb-3"><b><i class="fa fa-circle-info"></i> Informations</b></h5>
                     <div>
@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <div class="order-box col-5 d-flex flex-column align-items-center border rounded mb-0 mr-3 ml-3 pt-3 pb-3 h-100">
+            <div class="order-box col-11 col-md-5 d-flex flex-column align-items-center border rounded mb-4 mb-md-0 mr-3 ml-3 pt-3 pb-3 h-100">
                 <h5 class="mb-3"><b><i class="fa fa-location-dot"></i> Adresse de livraison</b></h5>
                 <div class="w-100 d-flex flex-row justify-content-around">
                     <div>
@@ -58,7 +58,7 @@
                 $quantity = $orderitem->get_quantity();
                 ?>
 
-                <div class="product-box col-5 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center justify-content-between border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
+                <div class="product-box col-12 col-md-5 d-flex flex-row align-items-center justify-content-between border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
                     <div class="d-flex flex-column align-items-center bg-white col-4">
                         <img class="product-img w-100 mb-2" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
                     </div>

@@ -5,7 +5,7 @@
         
         
         <div class="d-flex justify-content-center w-100">
-            <form class="register-box p-3 border rounded col-3 d-flex flex-column" method="post" action="register">
+            <form class="register-box p-3 border rounded col-8 col-md-3 d-flex flex-column" method="post" action="register">
                 <label for="firstname">Prénom</label>
                 <input type="text" name="firstname" value="<?php if(isset($autofill["firstname"])) echo $autofill["firstname"]; ?>">
                 <?php if(isset($errors["missing_firstname"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre prénom.</div>";?>

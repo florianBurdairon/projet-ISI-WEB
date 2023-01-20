@@ -2,8 +2,8 @@
     <div class="container-fluid">
         <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-user"></i> Mon compte</h1>
         <div class="d-flex flex-column align-items-center justify-content-center w-100">
-            
-            <div class="d-flex flex-column col-4">
+
+            <div class="d-flex flex-column col-9 col-lg-4 col-md-6 ">
                 <p class="account-category border-top border-right border-left rounded-top w-100 pt-1"><b>Nom :</b></p>
                 <p class="account-info border-bottom border-right border-left w-100 pb-1"><?=(($user != null) ? $user->get_surname() : "");?></p>
                 <p class="account-category border-top border-right border-left w-100 pt-1"><b>Prénom :</b></p>
