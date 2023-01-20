@@ -49,6 +49,19 @@ class Router
                             } 
                             else throw new Exception("Catégorie manquante");
                         }
+                        elseif ($_GET["action"] == 'product')
+                        {
+                            $id = null;
+                            if(isset($_GET["id"]) && $_GET["id"] != ""){
+                                $id = $_GET["id"];
+                                $product = Product::select_product_by_id($id);
+                                if ($product != null) {
+                                    $this->ctrlProducts->select_by_id($id);
+                                }
+                                else throw new Exception("Produit non valide");
+                            } 
+                            else throw new Exception("Produit manquant");
+                        }
                         else throw new Exception("Action non valide");
                     }
                     else{
@@ -172,7 +185,11 @@ class Router
                         }
                     }
                     else throw new Exception("Vous n'êtes pas connectés ou vous n'avez pas la permission d'accéder à cette page");
-                } 
+                }
+                else if (isset($_SESSION["admin"]))
+                {
+                    $this->ctrlHome->index();
+                }
                 else throw new Exception("Action non valide");
             } else {
                 // aucune action définie : affichage de l'accueil

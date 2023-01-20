@@ -1,6 +1,6 @@
 <div class="d-sm-inline-flex d-flex w-100 flex-column">
 <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-location-dot"></i> Adresse de livraison</h3>
-    <div class="d-flex flex-row pr-4 pl-4">
+    <div class="d-flex flex-column flex-md-row pr-4 pl-4">
         <?php if (isset($customeradd)) { 
             $firstname = $customeradd->get_forname();
             $surname = $customeradd->get_surname();
@@ -11,7 +11,7 @@
             $city = $customeradd->get_city();
             $postcode = $customeradd->get_postcode();
             ?>
-            <div class="container-fluid register-box col-5 border rounded d-flex flex-column align-items-center p-3">
+            <div class="container-fluid register-box d-inline-flex border rounded d-flex flex-column align-items-center p-3 mb-4">
                 <h3 class="mb-3"><b>Votre compte</b></h3>
                 <form method="post" action="choiceaddress" class="d-flex flex-column w-75">
                     <div class="d-flex flex-row justify-content-between pb-2">
@@ -75,7 +75,7 @@
             $postcode = "";
         }
         ?>
-        <div class="container-fluid register-box col-5 border rounded d-flex flex-column align-items-center p-3">
+        <div class="container-fluid register-box d-inline-flex border rounded d-flex flex-column align-items-center p-3 mb-4">
             <h3 class="mb-3"><b>Nouvelle adresse</b></h3>
             <form method="post" action="choiceaddress" class="d-flex flex-column w-75">
                 <div class="d-flex flex-row justify-content-between pb-2">

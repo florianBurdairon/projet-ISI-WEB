@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-list"></i> Mes commandes</h1>
 
-        <div class="d-flex flex-wrap justify-content-center w-100">
+        <div class="container-fluid d-flex flex-wrap justify-content-center">
             <?php
                 foreach($orders as $order)
                 {
@@ -39,7 +39,7 @@
 
                     <!-- HTML -->
 
-                    <div class="order-box col-3 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
+                    <div class="order-box col-8 col-lg-3 col-md-4 d-flex flex-column flex-lg-row flex-md-row flex-sm-column align-items-center border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
                         <a href="orders/<?= $id ?>" class="order-link p-2 w-100 d-flex flex-column align-items-center">
                             <h5 class="mb-3"><b> <i class="fa <?= $icon?> mr-3"></i> Commande N°<?= $id ?></b></h5>
                             <div>

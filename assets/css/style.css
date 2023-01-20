@@ -42,7 +42,19 @@ table, th, td{
 
 .product-box {
     box-shadow: #BBBBBB 5px 5px 5px;
-    flex: 50%;
+}
+
+.product-box-clickable {
+    color: #616161;
+}
+
+.review-box {
+    box-shadow: #BBBBBB 5px 5px 5px;
+}
+
+.product-box-clickable:hover {
+    color: black;
+    text-decoration: none;
 }
 
 .register-box {
