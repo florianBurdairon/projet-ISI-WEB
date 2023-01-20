@@ -39,8 +39,12 @@
             <a class="btn border rounded larger-text" href="paid"><b><i class="fa fa-dollar"></i> Payer <?= number_format($total, 2) ?>€</b></a>
         </div>
 
-        <hr class="hr mb-5 mt-5" />
-            
+        <hr class="hr mt-5" />
+
+        <div class="mb-3 mt-3 d-flex justify-content-center">
+            <h2>Contenu de la commande</h2>
+        </div>
+        
         <div class="container d-flex flex-wrap justify-content-center">
         <?php
             foreach($orderitems as $orderitem)
