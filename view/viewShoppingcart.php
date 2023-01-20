@@ -26,7 +26,12 @@
 
                     <div class="container d-flex justify-content-between align-items-center mb-4 border col-9 p-2 rounded price-shadow">
                         <h3> Prix total de la commande : <?= number_format($total, 2) ?>€</h3>
+                        <?php if($status == 0 || $status == '0'): ?>
                         <a class="border rounded" href="<?= ROOT ?>shoppingcart/pay/selectaddress"><i class="btn fa fa-dollar-sign"> Payer</i></a>
+                        <?php elseif($status == 1 || $status == '1'): ?>
+                        <a class="border rounded" href="<?= ROOT ?>shoppingcart/pay/selectaddress"><i class="btn fa fa-location-dot"> changer l'adresse</i></a>
+                        <a class="border rounded" href="<?= ROOT ?>shoppingcart/pay/paymentchoice"><i class="btn fa fa-dollar-sign"> Payer</i></a>
+                        <?php endif; ?>
                     </div>
 
                     <div class="container d-flex flex-wrap justify-content-center">

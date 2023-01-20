@@ -31,14 +31,16 @@
                     $price =$product->get_price();
                     ?>
 
-                    <a href="<?= $link ?>" class="product-box-clickable col-12 col-md-5 d-flex flex-row align-items-center justify-content-between border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
-                        <div class="d-flex flex-column col-4 align-items-center">
+                    <div class="product-box col-12 col-md-5 d-flex flex-row align-items-center justify-content-between border rounded mb-4 mr-3 ml-3 pt-3 pb-3">
+                        <a href="<?= $link ?>" class="product-box-clickable d-flex flex-column col-4 align-items-center">
                             <img class="product-img w-100 mb-2" src="<?= ROOT ?>assets/productimages/<?= $img ?>" alt="<?= $img ?>">
                             <h3><b><?= $price ?>€</b></h3>
-                        </div>
-                        <div class="d-flex flex-column align-items-center align-items-md-start align-items-lg-start">
-                            <h4><b><?= $name ?></b></h4>
-                            <p class="text-md-left text-sm-center"><?= $desc ?></p>
+                        </a>
+                        <div class="d-flex flex-column align-items-center align-items-md-start">
+                            <a  href="<?= $link ?>" class="product-box-clickable d-flex flex-column align-items-center align-items-md-start">
+                                <h4><b><?= $name ?></b></h4>
+                                <p class="text-md-left text-sm-center"><?= $desc ?></p>
+                            </a>
 
                             <form class="d-flex flex-column align-items-center" method="post" action="<?= ROOT ?>shoppingcart/insert">
                                 <input type="hidden" name="product_id" value="<?= $id ?>">
@@ -48,7 +50,7 @@
                                 </div>
                             </form>
                         </div>
-                    </a>
+                    </div>
 
                     <?php
                 }

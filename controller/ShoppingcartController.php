@@ -45,11 +45,12 @@ class ShoppingcartController
 
             $orderitems = $order->get_items();
             $categories = Category::select_categories();
+            $status = $order->get_status();
 
             $view = new View("Shoppingcart", "Panier");
             if (sizeof($orderitems) > 0)
             {
-                $view->generate(array('orderitems' => $orderitems, 'total' => $order->get_total(), 'categories' => $categories));
+                $view->generate(array('orderitems' => $orderitems, 'total' => $order->get_total(), 'categories' => $categories, 'status' => $status));
             }
             else
             {
@@ -101,7 +102,6 @@ class ShoppingcartController
     {
         if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
             throw new Exception("Impossible de choisir une adresse de livraison pour une commande qui n'existe pas");
-
         
         $param = array();
         if (isset($_SESSION["user"]))

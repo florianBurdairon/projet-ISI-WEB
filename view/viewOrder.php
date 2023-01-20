@@ -30,7 +30,15 @@
                 <div class="p-2 w-100 d-flex flex-column align-items-center">
                     <h5 class="mb-3"><b><i class="fa fa-circle-info"></i> Informations</b></h5>
                     <div>
-                        <p class="mb-2">Paiement par <?= $order->get_payment_type() ?></p>
+                        <p class="mb-2">
+                        <?php 
+                            try {
+                                $payment_type = "Paiement par".$order->get_payment_type();
+                                echo $payment_type;
+                            } catch (Exception $e){
+                                echo "Pas de moyen de paiement choisi";
+                            }
+                        ?></p>
                         <p class="mb-2">Date : <?= $date ?></p>
                         <p class="mb-2">Status : <?= $status ?></p>
                         <p class="mb-0">Montant total : <?= $order->get_total() ?>€</p>

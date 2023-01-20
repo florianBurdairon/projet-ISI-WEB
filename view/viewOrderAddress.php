@@ -10,8 +10,9 @@
             $add2 = $customeradd->get_add2();
             $city = $customeradd->get_city();
             $postcode = $customeradd->get_postcode();
+            if($firstname != "" && $surname != "" && $email != "" && $phone != "" && $add1 != "" && $city != "" && $postcode != ""):
             ?>
-            <div class="container-fluid register-box d-inline-flex border rounded d-flex flex-column align-items-center p-3 mb-4">
+            <div class="container-fluid register-box d-inline-flex border rounded d-flex flex-column align-items-center p-3 mr-2 ml-2 mb-4">
                 <h3 class="mb-3"><b>Votre compte</b></h3>
                 <form method="post" action="choiceaddress" class="d-flex flex-column w-75">
                     <div class="d-flex flex-row justify-content-between pb-2">
@@ -52,6 +53,7 @@
                 </form>
             </div>
         <?php 
+            endif;
         } 
         if (isset($deliveryadd))
         {
@@ -75,7 +77,7 @@
             $postcode = "";
         }
         ?>
-        <div class="container-fluid register-box d-inline-flex border rounded d-flex flex-column align-items-center p-3 mb-4">
+        <div class="container-fluid register-box d-inline-flex border rounded d-flex flex-column align-items-center p-3 mr-2 ml-2 mb-4">
             <h3 class="mb-3"><b>Nouvelle adresse</b></h3>
             <form method="post" action="choiceaddress" class="d-flex flex-column w-75">
                 <div class="d-flex flex-row justify-content-between pb-2">
@@ -89,10 +91,14 @@
                 <div class="d-flex flex-row justify-content-between pb-2">
                     <label for="email">Adresse mail</label>
                     <input type="email" name="email" value="<?= $email ?>">
+                    <?php if(isset($errors["missing_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre adresse email.</div>";?>
+                    <?php if(isset($errors["wrong_email"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Adresse email incorrect.</div>";?>
                 </div>
                 <div class="d-flex flex-row justify-content-between pb-2">
                     <label for="phone">Téléphone</label>
                     <input type="number" name="phone" value="<?= $phone ?>">
+                    <?php if(isset($errors["missing_phone"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir votre numéro de téléphone.</div>";?>
+                    <?php if(isset($errors["wrong_phone"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Numéro de téléphone incorrect.</div>";?>
                 </div>
                 <div class="d-flex flex-row justify-content-between pb-2">
                     <label for="add1">Adresse</label>
@@ -109,6 +115,7 @@
                 <div class="d-flex flex-row justify-content-between pb-2">
                     <label for="postcode">Code postal</label>
                     <input type="number" name="postcode" value="<?= $postcode ?>">
+                    <?php if(isset($errors["wrong_postcode"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Code postal incorrect.</div>";?>
                 </div>
                 <div class="d-flex flex-row justify-content-center">
                     <button class="btn align-items-end" type="submit">Utiliser cette addresse</button>
