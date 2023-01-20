@@ -5,6 +5,13 @@ require_once 'model/order.php';
 require_once 'model/orderItem.php';
 require_once 'view/view.php';
 
+/**
+ * Class AdminController
+ * Manage every action done by the admin :
+ *  - logout
+ *  - select all orders
+ *  - validate orders
+ */
 class AdminController
 {
     public function logout()

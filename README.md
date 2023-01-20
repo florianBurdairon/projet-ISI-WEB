@@ -6,6 +6,7 @@ Membres du groupe :
 
 Répartitions des tâches :
 (Pour plus de détails, voir push sur Github)
+
  Alban :
   - Produits
   - Panier

@@ -4,6 +4,11 @@ require_once 'model/product.php';
 require_once 'model/review.php';
 require_once 'view/view.php';
 
+/**
+ * Class ProductsController
+ * Manage every action on products :
+ *  - select all / select one
+ */
 class ProductsController
 {
     public function select()

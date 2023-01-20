@@ -7,6 +7,15 @@ require_once 'model/orderItem.php';
 require_once 'view/view.php';
 require_once "fpdf/fpdf.php";
 
+/**
+ * Class AccountController
+ * Manage every action on the account :
+ *  - login
+ *  - register
+ *  - logout
+ *  - show infos on "My account"
+ *  - show orders on "My orders"
+ */
 class AccountController
 {
     public function login()
@@ -16,8 +25,10 @@ class AccountController
 
         $password_pattern = "/^(?=.*\d)(?=.*[+*!&?#|_])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/";
 
+        // Is there a valid input (no empty)
         if(isset($_POST["username"]) && $_POST["username"] != '' && isset($_POST["raw_password"]) && $_POST["raw_password"] != '' && preg_match($password_pattern, $_POST["raw_password"]))
         {
+            // Is the person trying to connect an admin ?
             $admin = Admin::check_if_admin($_POST["username"], $_POST["raw_password"]);
             if($admin){
                 $_SESSION["admin"] = serialize($admin);
@@ -26,6 +37,7 @@ class AccountController
                 unset($_SESSION["shoppingcart"]);
                 header("Location: ".ROOT."home");
             }
+            // Else, it is a customer
             else{
                 $db_login = Login::select_login_by_username($_POST["username"]);
                 $login = new Login($_POST);
@@ -92,6 +104,7 @@ class AccountController
         $phone_pattern = "/^(?:(?:\+|00)33|0)(?:\s*)[1-9](?:[\s.-]*\d{2}){4}$/";
         $postcode_pattern = "/^$|^[0-9]{5}/";
 
+        // Try to catch any error on account creation
         try{
             $customer = new Customer($_POST);
             $login = null;
@@ -209,6 +222,7 @@ class AccountController
         header("Location: ".ROOT."home");
     }
 
+    // Page to login
     public function loginpage()
     {
         $errors = array();
@@ -229,6 +243,7 @@ class AccountController
         $view->generate(array("errors" => $errors, "autofill" => $autofill));
     }
 
+    // Page to register
     public function registerpage()
     {
         $errors = array();

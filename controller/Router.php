@@ -6,6 +6,11 @@ require_once 'controller/ShoppingcartController.php';
 require_once 'controller/AdminController.php';
 require_once 'view/view.php';
 
+/**
+ * Class Router
+ * Manage redirection and url comprehenshion
+ * Switch between controllers depending on $_GET["controller"], $_GET["action"] et $_GET["id"]
+ */
 class Router
 {
     private $ctrlHome;
@@ -29,12 +34,17 @@ class Router
         try {
             if (isset($_GET['controller']) && $_GET['controller'] != '') {
                 if($_GET['controller'] != 'account') {
-                    unset($_SESSION["error"]);
                     unset($_SESSION["autofill"]);
                 }
+                if($_GET['controller'] != 'account'){
+                    if(($_GET["controller"] == "shoppingcart" && $_GET["action"] == "selectaddress"))
+                        unset($_SESSION["error"]);
+                }
+                // We want to see home
                 if ($_GET['controller'] == 'home') {
                     $this->ctrlHome->index();
-                } 
+                }
+                // We do an action on products
                 elseif ($_GET['controller'] == 'products' && !isset($_SESSION["admin"])) {
                     if(isset($_GET['action']) && $_GET['action'] != ""){
                         if($_GET['action'] == 'cat'){
@@ -68,6 +78,7 @@ class Router
                         $this->ctrlProducts->select();
                     }
                 } 
+                // We do an action on the account
                 elseif ($_GET['controller'] == 'account') {
                     if(isset($_GET['action']) && $_GET['action'] != ""){
                         if($_GET['action'] == 'loginpage'){
@@ -121,6 +132,7 @@ class Router
                     }
                     else throw new Exception("Action non valide");
                 } 
+                // We do an action on the shopping cart
                 elseif ($_GET['controller'] == 'shoppingcart' && !isset($_SESSION["admin"])) {
                     if (isset($_GET['action']) && $_GET['action'] != "")
                     {
@@ -137,6 +149,9 @@ class Router
                                 }
                                 elseif ($_GET["id"] == "choiceaddress") {
                                     $this->ctrlShoppingcart->save_address();
+                                }
+                                elseif ($_GET["id"] == "usecustomeraddress") {
+                                    $this->ctrlShoppingcart->use_customer_address();
                                 }
                                 elseif ($_GET["id"] == "paymentchoice") {
                                     $this->ctrlShoppingcart->payment_choice();
@@ -158,6 +173,7 @@ class Router
                     else
                         $this->ctrlShoppingcart->select();
                 }
+                // We do an action with admin
                 elseif ($_GET['controller'] == 'admin') {
                     if(isset($_SESSION["admin"])){
                         if(isset($_GET['action']) && $_GET['action'] != ""){

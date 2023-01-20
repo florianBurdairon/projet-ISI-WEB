@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class View
+ * Manage display of views
+ */
 class View{
     private $file;
     private $title;

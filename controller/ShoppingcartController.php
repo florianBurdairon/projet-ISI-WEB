@@ -3,6 +3,15 @@ require_once 'model/order.php';
 require_once 'view/view.php';
 require_once 'fpdf/fpdf.php';
 
+/**
+ * Class ShoppingCartController
+ * Manage every action done on the shopping cart
+ *  - select
+ *  - add or delete from the database
+ *  - choose delivery address
+ *  - pay
+ *  - pdf generation
+ */
 class ShoppingcartController
 {
     private function look_for_shoppingcart()
@@ -117,22 +126,97 @@ class ShoppingcartController
             $param["deliveryadd"] = $deladd;
         } catch (Exception $e) {}
         
+        $errors = array();
+        if(isset($_SESSION["error"]["order"])){
+            if(is_array($_SESSION["error"]["order"])){
+                foreach($_SESSION["error"]["order"] as $error){
+                    $errors[$error] = true;
+                }
+            }
+            else{
+                $errors[$_SESSION["error"]["order"]] = true;
+            }
+        }
+        $param["errors"] = $errors;
+
         $view = new View("OrderAddress", "Panier");
         $view->generate($param);
     }
 
-    public function save_address()
+    public function use_customer_address()
     {
-        if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
-            throw new Exception("Impossible de sauvegarder une adresse de livraison pour une commande qui n'existe pas");
-
-        $deladd = new DeliveryAdd($_POST);
+        $deladd = DeliveryAdd::create_address_from_customer(unserialize($_SESSION["user"]));
         $deladd->insert();
         $order = unserialize($_SESSION["shoppingcart"]);
         $order->change_address($deladd);
         $_SESSION["shoppingcart"] = serialize($order);
 
         header("Location: ".ROOT."shoppingcart/pay/paymentchoice");
+    }
+
+    public function save_address()
+    {
+        $error_count = 0;
+        $_SESSION["error"]["order"] = array();
+
+        $phone_pattern = "/^(?:(?:\+|00)33|0)(?:\s*)[1-9](?:[\s.-]*\d{2}){4}$/";
+        $postcode_pattern = "/^$|^[0-9]{5}$/";
+
+        if (!isset($_SESSION["shoppingcart"]) || sizeof(unserialize($_SESSION["shoppingcart"])->get_items()) < 1)
+            throw new Exception("Impossible de sauvegarder une adresse de livraison pour une commande qui n'existe pas");
+        try{
+            if(empty($_POST["firstname"]) || empty($_POST["surname"]) || empty($_POST["email"]) || empty($_POST["phone"]) || empty($_POST["add1"]) || empty($_POST["city"]) || empty($_POST["postcode"])) throw new Exception();
+            if(!preg_match($phone_pattern, $_POST["phone"]) || !preg_match($postcode_pattern, $_POST["postcode"]) || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) throw new Exception();
+            $deladd = new DeliveryAdd($_POST);
+            $deladd->insert();
+            $order = unserialize($_SESSION["shoppingcart"]);
+            $order->change_address($deladd);
+            $_SESSION["shoppingcart"] = serialize($order);
+            header("Location: ".ROOT."shoppingcart/pay/paymentchoice");
+        }
+        catch(Exception $e){
+            if(!isset($_POST["email"]) || $_POST["email"] == ''){
+                $_SESSION["error"]["order"][$error_count] = "missing_email";
+                $error_count++;
+            }
+            if(!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
+                $_SESSION["error"]["order"][$error_count] = "wrong_email";
+                $error_count++;
+            }
+            if(!isset($_POST["firstname"]) || $_POST["firstname"] == ''){
+                $_SESSION["error"]["order"][$error_count] = "missing_firstname";
+                $error_count++;
+            }
+            if(!isset($_POST["surname"]) || $_POST["surname"] == ''){
+                $_SESSION["error"]["order"][$error_count] = "missing_surname";
+                $error_count++;
+            } 
+            if(!isset($_POST["phone"]) || $_POST["phone"] == ''){
+                $_SESSION["error"]["order"][$error_count] = "missing_phone";
+                $error_count++;
+            }
+            if(!preg_match($phone_pattern, $_POST["phone"])){
+                $_SESSION["error"]["order"][$error_count] = "wrong_phone";
+                $error_count++;
+            }
+            if(!isset($_POST["add1"]) || $_POST["add1"] == ''){
+                $_SESSION["error"]["order"][$error_count] = "missing_add1";
+                $error_count++;
+            }
+            if(!isset($_POST["city"]) || $_POST["city"] == ''){
+                $_SESSION["error"]["order"][$error_count] = "missing_city";
+                $error_count++;
+            }
+            if(!isset($_POST["postcode"]) || $_POST["postcode"] == ''){
+                $_SESSION["error"]["order"][$error_count] = "missing_postcode";
+                $error_count++;
+            }
+            if(!preg_match($postcode_pattern, $_POST["postcode"])){
+                $_SESSION["error"]["order"][$error_count] = "wrong_postcode";
+                $error_count++;
+            }
+            header("Location: ".ROOT."shoppingcart/pay/selectaddress");
+        }
     }
 
     public function payment_choice()

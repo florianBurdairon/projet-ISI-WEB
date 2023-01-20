@@ -27,13 +27,13 @@
 
                 <label class="mt-3" for="raw_password">Mot de passe</label>
                 <input type="password" class="password" name="raw_password" pattern="^(?=.*\d)(?=.*[+*!&?#|_])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$">
-                <small class="password-info">Le mot de passe doit contenir au minimum 8 caractères dont chacun des caractères suivant : minuscule, majuscule, chiffre, caractère spécial (&,!,_,-,[,],\,^,$,.,|,?,*,+,(,))</small>
+                <small class="password-info">Le mot de passe doit contenir au minimum 8 caractères dont chacun des caractères suivant : minuscule, majuscule, chiffre, caractère spécial (&,!,_,[,],|,?,*,+)</small>
                 <?php if(isset($errors["missing_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez saisir un mot de passe.</div>";?>
                 <?php if(isset($errors["wrong_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Mot de passe incorrect.</div>";?>
 
                 <label class="mt-3" for="raw_password2">Confirmation mot de passe</label>
                 <input type="password" class="password" name="raw_password2" pattern="^(?=.*\d)(?=.*[+*!&?#|_])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$">
-                <small class="password-info">Le mot de passe doit contenir au minimum 8 caractères dont chacun des caractères suivant : minuscule, majuscule, chiffre, caractère spécial (&,!,_,-,[,],\,^,$,.,|,?,*,+,(,))</small>
+                <small class="password-info">Le mot de passe doit contenir au minimum 8 caractères dont chacun des caractères suivant : minuscule, majuscule, chiffre, caractère spécial (&,!,_,[,],|,?,*,+)</small>
                 <?php if(isset($errors["missing_password2"]) && !isset($errors["missing_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Veuillez re-saisir le mot de passe.</div>";?>
                 <?php if(isset($errors["different_password"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Mots de passe différents.</div>";?>
                 <?php if(isset($errors["wrong_password2"])) echo "<div class=\"alert alert-danger\" role=\"alert\">Mot de passe incorrect.</div>";?>
