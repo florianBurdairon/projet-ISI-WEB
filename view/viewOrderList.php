@@ -8,7 +8,11 @@
                 {
                     try{
                         $id = $order->get_id();
-                        $payment_type = $order->get_payment_type();
+                        $payment_type = null;
+                        try{
+                            $payment_type = $order->get_payment_type();
+                        }
+                        catch(Exception $e){}
                         $date = DateTime::createFromFormat('Y-m-d', $order->get_date());
                         $status = "";
                         $icon = "";
@@ -39,7 +43,11 @@
                         <a href="orders/<?= $id ?>" class="order-link p-2 w-100 d-flex flex-column align-items-center">
                             <h5 class="mb-3"><b> <i class="fa <?= $icon?> mr-3"></i> Commande N°<?= $id ?></b></h5>
                             <div>
+                                <?php if($payment_type != null) :?>
                                 <p class="mb-2">Paiement par <?= $payment_type ?></p>
+                                <?php else :?>
+                                <p class="mb-2">Mode de paiement non défini</p>
+                                <?php endif;?>
                                 <p class="mb-2">Date : <?= $date->format('d/m/Y') ?></p>
                                 <p class="mb-2">Status : <?= $status ?></p>
                                 <p class="mb-0">Montant total : <?= $total ?>€</p>
