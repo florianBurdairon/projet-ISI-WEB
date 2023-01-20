@@ -36,7 +36,7 @@
         </div>
         
         <div class="mt-3 d-flex justify-content-center">
-            <a class="btn btn-light larger-text" href="paid"><b><i class="fa fa-dollar"></i> Payer <?= number_format($total, 2) ?>€</b></a>
+            <a class="btn border rounded larger-text" href="paid"><b><i class="fa fa-dollar"></i> Payer <?= number_format($total, 2) ?>€</b></a>
         </div>
 
         <hr class="hr mb-5 mt-5" />

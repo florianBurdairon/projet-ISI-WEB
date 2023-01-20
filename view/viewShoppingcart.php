@@ -19,7 +19,6 @@
         <div class="container-fluid w-100">
             <h1 class="mt-4 mb-3 ml-5"><i class="fa fa-cart-shopping"></i> Panier</h1>
 
-            
             <?php
                 if (isset($orderitems))
                 {
@@ -27,7 +26,7 @@
 
                     <div class="container d-flex justify-content-between align-items-center mb-4 border col-9 p-2 rounded price-shadow">
                         <h3> Prix total de la commande : <?= number_format($total, 2) ?>€</h3>
-                        <a href="<?= ROOT ?>shoppingcart/pay/selectaddress"><i class="btn fa fa-dollar-sign"> Payer</i></a>
+                        <a class="border rounded" href="<?= ROOT ?>shoppingcart/pay/selectaddress"><i class="btn fa fa-dollar-sign"> Payer</i></a>
                     </div>
 
                     <div class="container d-flex flex-wrap justify-content-center">
